@@ -133,9 +133,14 @@ Nothing changed.
 
 
 
-### If the bookmark does not exist on remote repo 
+### If the branch does not exist on remote repo 
 
 Only once.
+
+Then execute:
+```
+jj git push --allow-new
+```
 
 If jj git push causes this problem:
 
@@ -147,7 +152,7 @@ Nothing changed.
 
 
 
-### If the bookmark exists on the remote repo
+### If the branch exists on the remote repo
 
 Only once.
 
@@ -159,7 +164,7 @@ This tells jj: "Find the local bookmark named main and mark it as tracking main@
 
 
 
-### Push the changes
+### If the branch exists on the remote repo
 
 Every time.
 
