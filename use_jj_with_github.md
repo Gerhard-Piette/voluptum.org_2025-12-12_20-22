@@ -113,51 +113,6 @@ jj git fetch
 
 
 
-## If the bookmark does not exist on remote repo 
-
-Only once.
-
-If jj git push causes this problem:
-
-```
-Warning: Refusing to create new remote bookmark main@origin
-Hint: Use --allow-new to push new bookmark. Use --remote to specify the remote to push to.
-Nothing changed.
-```
-
-Then execute:
-```
-jj git push --allow-new
-```
-
-
-
-
-
-
-
-
-
-
-## If the bookmark exists on the remote repo
-
-Only once.
-
-```
-jj bookmark track main@origin
-```
-
-This tells jj: "Find the local bookmark named main and mark it as tracking main@origin."
-
-
-
-
-
-
-
-
-
-
 ## Point your bookmark to the new result and push
 
 Every time.
@@ -172,7 +127,37 @@ Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=
 Nothing changed.
 ```
 
-Then:
+
+
+### If the bookmark does not exist on remote repo 
+
+Only once.
+
+If jj git push causes this problem:
+
+```
+Warning: Refusing to create new remote bookmark main@origin
+Hint: Use --allow-new to push new bookmark. Use --remote to specify the remote to push to.
+Nothing changed.
+```
+
+
+
+### If the bookmark exists on the remote repo
+
+Only once.
+
+```
+jj bookmark track main@origin
+```
+
+This tells jj: "Find the local bookmark named main and mark it as tracking main@origin."
+
+
+
+### Push the changes
+
+Every time.
 
 ```
 jj git push
