@@ -113,25 +113,6 @@ jj git fetch
 
 
 
-## If the bookmark exists on the remote repo
-
-Only once.
-
-```
-jj bookmark track main@origin
-```
-
-This tells jj: "Find the local bookmark named main and mark it as tracking main@origin."
-
-
-
-
-
-
-
-
-
-
 ## If the bookmark does not exist on remote repo 
 
 Only once.
@@ -148,6 +129,25 @@ Then execute:
 ```
 jj git push --allow-new
 ```
+
+
+
+
+
+
+
+
+
+
+## If the bookmark exists on the remote repo
+
+Only once.
+
+```
+jj bookmark track main@origin
+```
+
+This tells jj: "Find the local bookmark named main and mark it as tracking main@origin."
 
 
 
