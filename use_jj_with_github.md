@@ -115,6 +115,10 @@ jj git fetch
 
 ## Point your bookmark to the new result and push
 
+
+
+### Set the bookmark to the correct changeset
+
 Every time.
 
 ```
