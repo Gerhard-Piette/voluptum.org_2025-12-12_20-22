@@ -21,6 +21,10 @@
     - Removed the _ marker.
     - Added [...] for declaration of a styled section in a line with space marker. 
     - Added the pre marker.
+- Added com marker for components.
+- Replaced presented output with printed output.
+- Added def marker.
+- Added do marker.
 
 
 

@@ -49,9 +49,9 @@ Alpine.js for compilation of Vlpt at runtime.
 
 
 
-## Presented output
+## Printed output
 
-Presented output should be presented to the consumer in some form.
+Printed output should be presented to the consumer in some form.
 
 
 
@@ -83,7 +83,7 @@ Alpine.js allows reactivity of output that is compiled at runtime.
 
 The compiler is implemented in the Rust language.
 
-Rust allows translation at compile time and at runtime with WASM.
+Rust allows translation of Vlpt text at any time time including at runtime with WASM.
 
 
 
@@ -94,7 +94,7 @@ Rust allows translation at compile time and at runtime with WASM.
 
 
 
-## Allowed characters in  text
+## Allowed characters in Vlpt text
 
 To support "all valid text including emojis" while maintaining security, here is the complete **Allowlist** for Vlpt.
 
@@ -161,6 +161,41 @@ A marker must be followed by a space character (U+0020 SPACE, ASCII 32 ).
 
 
 
+## Block
+
+A block spans from a marker to a stop marker.
+
+
+
+### Marker block
+
+A marker block spans from marker to stop marker.
+
+```vlpt
+div
+ text
+/
+```
+
+A div block spans from the div marker to the / marker.
+
+
+
+### Round block
+
+A round block spans from ( to ).
+
+A round block must not contain markers.
+
+
+
+
+
+
+
+
+
+
 ## ` ` marker or space marker
 
 The ` ` or space marker (U+0020 SPACE, ASCII 32 ) indicates a literal line.
@@ -180,9 +215,9 @@ Where:
 
 
 
-### Presented output
+### Printed output
 
-The presented output is the line including the line break character but without the ` ` marker.
+The printed output is the line including the line break character but without the ` ` marker.
 
 The string content of the formatted section is translated as span element and style attribute in HTML.
 
@@ -211,7 +246,7 @@ pre
 
 
 
-### Presented output
+### Printed output
 
 The pre block is translated into a pre element in HTML.
 
@@ -228,6 +263,8 @@ The pre block is translated into a pre element in HTML.
 
 The `//` marker indicates a comment line.
 
+// is used because AI in 2025 is trained to use // for comments.
+
 
 
 ### Example
@@ -238,9 +275,9 @@ The `//` marker indicates a comment line.
 
 
 
-### Presented output
+### Printed output
 
-A comment line has no presented output.
+A comment line has no printed output.
 
 
 
@@ -278,25 +315,25 @@ Where:
 
 
 
-## `let` marker
+## let marker
 
-The `let` marker indicates a line where a variable is defined.
+The let marker allows to bind a name to an expression that is complete before the end of the line.
 
 
 
-### Example
+### let line
+
+A let line begins with let marker and stops at the end of the line.
 
 ```vlpt
-let a = 4 + 5
+let name1 = 2 + 3
 ```
 
 
 
-### Presented output
+### Printed output
 
-A let line has no presented output.
-
-
+A let line has no printed output.
 
 
 
@@ -305,31 +342,71 @@ A let line has no presented output.
 
 
 
-## `=` marker
 
-The `=` marker indicates that the output of the following expression or of the defined variable is used as presented output.
+
+## def marker
+
+The def marker allows to bind a name to an expression that spans 1 or more multiple lines.
+
+
+
+### def block
+
+A def block begins with def marker and stops after the stop marker.
+
+```vlpt
+def name1 = expression
+ that might might
+ span multiple lines
+/ def
+```
+
+Where:
+- The expression can contain text with markers.
+
+
+
+### Printed output
+
+A def block has no printed output unless the defined name is printed with the print marker.
+
+
+
+
+
+
+
+
+
+
+## `=` marker or print marker
+
+The print marker indicates that the output of the following expression or of the defined variable is used as printed output.
 
 Allowed whitespace characters are optional after the = marker.
 
 
 
-### Examples
+### Print line
+
+A print line begins with `=` marker and stops on the same line.
+
+The expression of the print line must be complete before the end of the line.
 
 ```vlpt
-= name1
-= name2.name3
-= name4(arg5, arg6)
-= let name7 = name8.name9(arg11)
+= 1 + 2
+= let name1 = 1 + 2
+= name3
 ```
 
 Where:
-- The output of the variable name7 is presented output.
+- The value of name1 is printed after the assignment to the result of 1 + 2.
 
 
 
-### Presented output
+### Printed output
 
-The presented output is the presented output of the expression or variable after assignment.
+The printed output is the printed output of the expression or variable after assignment.
 
 
 
@@ -455,9 +532,9 @@ The only valid escape sequences in Vlpt:
 
 
 
-### Presented output
+### Printed output
 
-The presented output of a string is the string content.
+The printed output of a string is the string content.
 
 
 
@@ -626,7 +703,8 @@ memo name
 ```
 
 
-### Copying a named memo
+
+### Memo copy
 
 A named memo can be copied into another memo. The copied memo is part of the receiver memo. The copy of a memo has no other effect.
 
@@ -797,7 +875,7 @@ li
 
 
 
-### Presented output
+### Printed output
 
 As ol element in HTML.
 
@@ -834,7 +912,7 @@ li
 
 
 
-### Presented output
+### Printed output
 
 As ul element in HTML.
 
@@ -852,10 +930,10 @@ As ul element in HTML.
 Table markers are similar to HTML table tags.
 
 In Vlpt:
-- table
-- tr
-- th
-- td
+- table for table marker like in HTML.
+- tr for table row marker like in HTML.
+- th for table header marker like in HTML.
+- td for table data marker like in HTML.
 
 
 
@@ -892,6 +970,130 @@ td
 / tr
 / table
 ```
+
+
+
+
+
+
+
+
+
+
+## com marker
+
+The com marker is used to define a component.
+
+
+
+### Component type definition
+
+```vlpt
+com Card
+, title: string = "no title"
+, content
+, footer
+ text1
+= title
+ text2
+= content
+ text3
+= footer
+ text4
+/ com
+```
+
+Where:
+- The com marker indicates a com block for a component type definition.
+- The com marker is followed by the component type name.
+- title, content, and footer are attributes or properties of the component.
+- Vlpt offers an optional types system that is meant for humans and AI. The Vlpt compiler might never offer a complete type checker.
+- The type string indicates a string value.
+- "no title" is a default value for the title attribute.
+- An attribute declaration ( that is not followed by a colon and type ) is a slot attribute and stands for Vlpt text.
+
+
+
+### Component instance
+
+
+
+#### Example 1
+```vlpt
+Card
+, title = "Good title"
+content
+ text for content slot
+/ content
+footer
+ text for footer slot
+/ footer
+/ Card
+```
+
+Where:
+- Card is a component type name.
+- If the = marker followed by a component type name then a component of that type is created.
+- The component is translated to printed output is indicated by the = marker.
+
+
+
+#### Example 2
+
+```vlpt
+def card1 = Card
+, title = "Good title"
+content
+ text for content slot
+/ content
+footer
+ text for footer slot
+/ footer
+/ Card
+/ def
+```
+
+Where:
+- Card is a component type name.
+- The variable card1 is bound to the new Card.
+
+
+
+
+
+
+
+
+
+
+## do marker
+
+The do marker is used to contain text in the do language that is a Vlpt specific programming language.
+
+
+
+### Example 
+
+```vlpt
+do
+ text in the do language
+/ do
+```
+
+
+
+
+
+
+
+
+
+
+## Do language
+
+The do language is not determined yet.
+
+The do language is used in a do block.
 
 
 
