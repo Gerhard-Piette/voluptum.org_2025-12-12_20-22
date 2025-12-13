@@ -121,7 +121,7 @@ These categories are generally dangerous, so we only allow specific useful chara
 | **Cc** | **Horizontal Tab** | `U+0009` | Indentation. |
 | **Cc** | **Line Feed** | `U+000A` | Newline (Unix). |
 | **Cc** | **Carriage Return** | `U+000D` | Newline (Windows). |
-| **Cf** | **Soft Hyphen** | `U+00AD` | Common invisible formatting artifact. **Strip** (ignore) silently. |
+| **Cf** | **Soft Hyphen** | `U+00AD` | Common invisible formatting artifact. **Strip**. |
 | **Cf** | **Left-to-Right Mark** | `U+200E` | **Required** for mixed LTR/RTL text (e.g., English inside Arabic). |
 | **Cf** | **Right-to-Left Mark** | `U+200F` | **Required** for mixed LTR/RTL text (e.g., Hebrew inside English). |
 | **Cf** | **Zero Width Joiner** | `U+200D` | **Required** for complex emojis (Family, flags, skin tones). |
