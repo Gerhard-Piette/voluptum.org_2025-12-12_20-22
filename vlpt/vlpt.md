@@ -11,9 +11,9 @@
 
 ## About Vlpt
 
-Vlpt stands for Voluptum Script.
-
 Vlpt is pronounced Volupt.
+
+Vlpt stands for Voluptum Script.
 
 Vlpt is a text notation that offers:
 - text structures
@@ -36,8 +36,13 @@ Alpine.js for compilation of Vlpt at runtime.
 ## Unusual traits of Vlpt
 
 - A marker is a character or word at the beginning of a line and indicates how the line is compiled.
-- The editor is not meant to indent text. Instead section numbers ( e.g. 16.1.2.3 ) and other graphical indicators are used to indicate the current location in the document.
+- Vlpt text can be indented with horizontal tab characters before the marker.
+    But Vlpt text is not meant indented. Instead section numbers ( e.g. 16.1.2.3 ) and other graphical indicators are used to indicate the current location in the document.
 - The programmer can write a marker and some tool might replace the marker with another marker that is less confusing for AI.
+- There is a Vlpt normalizer that rewrites Vlpt text.
+    - Humans can read and write Vlpt text with syntactic sugar.
+    - Vlpt with syntactic sugar is not valid until maybe later version of Vlpt.
+    - AI should read and write Vlpt text without syntactic sugar. 
 
 
 
@@ -119,10 +124,15 @@ These categories are generally dangerous, so we only allow specific useful chara
 | Category | Character Name | Hex Code | Reason |
 | :--- | :--- | :--- | :--- |
 | **Zs** | **Space** | `U+0020` | Standard word separation. |
+| **Zs** | **No-Break Space** | `U+00A0` | Common in AI/Web input. **Normalize** to `U+0020`. |
 | **Cc** | **Horizontal Tab** | `U+0009` | Indentation. |
 | **Cc** | **Line Feed** | `U+000A` | Newline (Unix). |
 | **Cc** | **Carriage Return** | `U+000D` | Newline (Windows). |
+| **Cf** | **Soft Hyphen** | `U+00AD` | Common invisible formatting artifact. **Strip** (ignore) silently. |
+| **Cf** | **Left-to-Right Mark** | `U+200E` | **Required** for mixed LTR/RTL text (e.g., English inside Arabic). |
+| **Cf** | **Right-to-Left Mark** | `U+200F` | **Required** for mixed LTR/RTL text (e.g., Hebrew inside English). |
 | **Cf** | **Zero Width Joiner** | `U+200D` | **Required** for complex emojis (Family, flags, skin tones). |
+| **Cf** | **Variation Selector-15** | `U+FE0E` | **Required** to force text-style rendering (e.g., black & white symbols). |
 | **Cf** | **Variation Selector-16** | `U+FE0F` | **Required** to force emoji rendering (e.g., making "▶" colorful). |
 
 
@@ -167,8 +177,13 @@ The ` ` or space marker (U+0020 SPACE, ASCII 32 ) indicates a literal line.
 ### Example
 
 ```vlpt
- text
+ line with [class1 class2 "formatted"] text
 ```
+
+Where:
+- The space marker indicates a text line with optional styled sections.
+- class1 and class3 are CSS classes.
+- [class1 class2 "formatted" ] is a styled section. The string content is formatted according to class1 and class2.
 
 
 
@@ -176,6 +191,7 @@ The ` ` or space marker (U+0020 SPACE, ASCII 32 ) indicates a literal line.
 
 The presented output is the line including the line break character but without the ` ` marker.
 
+The string content of the formatted section is translated as span element and style attribute in HTML.
 
 
 
@@ -185,30 +201,26 @@ The presented output is the line including the line break character but without 
 
 
 
-## `_` marker or style marker
 
-The `_` marker indicates a line with 0 or more styled sections.
+## `pre` marker
+
+The pre marker is like the pre element in HTML and preserves all allowed characters including all whitespace.
 
 
 
 ### Example
 
 ```vlpt
-_ text1 _class1 class2: text2_
+pre
+ text where [class1 class2 "text" ] is not recognized for formatting
+/
 ```
-
-Where:
-- class1 and class2 are CSS classes.
-- The text between ": " an "_" is the styled text. The text is styled according to the CSS classes.
-- Within the styled text: "\_" is an escape sequence for the "_" character.
 
 
 
 ### Presented output
 
-The presented output is the line including the line break character but without the `_ ` marker.
-
-The styled text is styled according to the CSS classes.
+The pre block is translated into a pre element in HTML.
 
 
 
@@ -219,16 +231,16 @@ The styled text is styled according to the CSS classes.
 
 
 
-## `#` marker
+## `//` marker or comment marker
 
-The `#` marker indicates a comment line.
+The `//` marker indicates a comment line.
 
 
 
 ### Example
 
 ```vlpt
-# comment text
+// comment text
 ```
 
 
@@ -236,6 +248,33 @@ The `#` marker indicates a comment line.
 ### Presented output
 
 A comment line has no presented output.
+
+
+
+
+
+
+
+
+
+
+## `/` marker or stop marker
+
+The `/` marker indicates the end or closing of a block.
+
+
+
+### Example
+
+```vlpt
+/
+/xxx
+/ xxx
+/      xxx
+```
+
+Where:
+- xxx is optional. xxx stands for a marker or the name of a component. Space characters between / and xxs are allowed. Tools can add the marker or name when absent.
 
 
 
@@ -419,7 +458,7 @@ The only valid escape sequences in Vlpt:
 - \n : Line Feed.
 - \r : Carriage Return.
 - \t : Tab.
-- \u{1F680} : For Unicode character U+1F680. The number is a hexadecimal number from 0 to 10FFFF included.
+- \u{1F680} : For Unicode codepoint U+1F680. The number is a hexadecimal number from 0 to 10FFFF included. This aligns with Rust strings.
 
 
 
@@ -453,11 +492,13 @@ A package is a zip file with a folder structure that can comprise arbitrary file
 
 ## Package management
 
-A package is identified by its name and checksum.
+A package is identified by its identifier.
 
-A different name or a different checksum means a different package and different content.
+The package identifier can be any string and should include the version number.
 
-Content of different packages is never considered equal or compatible.
+The package manager should also require a certain checksum for package identification in order verify the content of a package.
+
+There is no compatibility packages with a different identifier.
 
 There is no semantic versioning for Vlpt packages.
 
@@ -576,6 +617,7 @@ A file memo has no name.
 ```vlpt
 memo
     content
+/ memo
 ```
 
 
@@ -587,6 +629,7 @@ The memo marker is followed by the name of the memo. A named memo is not applied
 ```vlpt
 memo name
     content
+/ memo
 ```
 
 
@@ -636,6 +679,7 @@ div
 , height = 200px
  text
  text
+/ div
 ```
 
 
@@ -647,25 +691,36 @@ div
 
 
 
-## `h` marker or header marker
+## H marker or header marker
 
 
 
 ### Example
 
 ```vlpt
-h
+h1
  text of a h1 header
-hh
+/ h1
+
+h2
  text of a h2 header
-hhh
+/ h2
+
+h3
  text of a h3 header
-hhhh
+/ h3
+
+h4
  text of a h4 header
-hhhhh
+/ h4
+
+h5
  text of a h5 header
-hhhhh
+/ h5
+
+h6
  text of a h6 header
+/ h6
 ```
 
 
@@ -712,56 +767,6 @@ quote
 
 
 
-## `end` marker
-
-The end mark indicates the end of the last opened block.
-
-
-
-
-
-
-
-
-
-
-## `:` marker or colon marker
-
-The meaning of the : marker is context dependent.
-
-The : marker the block of the last opened : block.
-
-The : marker opens a new : block.
-
-
-
-### Example 1
-
-```vlpt
-ul
-:
- text of the list item
-:
- text of the list item
-:
- text of the list item
-end
-```
-
-Where:
-- The : marker serves as separator of list items.
-- The : marker the block of the last opened : block.
-- The end marker indicates the end of the ul block. 
-
-
-
-
-
-
-
-
-
-
 ## `ol` marker for ordered list
 
 
@@ -770,19 +775,17 @@ Where:
 
 ```vlpt
 ol
-:
+.
  text of the list item
-:
+.
  text of the list item
-:
+.
  text of the list item
-end
+/ ol
 ```
 
 Where:
-- The : marker serves as separator of list items.
-- The end marker indicates the end of the ol block. 
-
+- The . marker serves as separator of list items.
 
 
 
@@ -801,18 +804,17 @@ Where:
 
 ```vlpt
 ul
-:
+.
  text of the list item
-:
+.
  text of the list item
-:
+.
  text of the list item
-end
+/ ul
 ```
 
 Where:
 - The : marker serves as separator of list items.
-- The end marker indicates the end of the ul block. 
 
 
 
@@ -823,9 +825,9 @@ Where:
 
 
 
-## s marker
+## strike marker
 
-The s marker is for strikethrough.
+The strike marker is for strikethrough.
 
 Like the s tag in HTML.
 
@@ -834,9 +836,9 @@ Like the s tag in HTML.
 ### Example 1
 
 ```vlpt
-s
+strike
  line
-end
+/ strike
 ```
 
 
@@ -864,35 +866,148 @@ In Vlpt:
 
 ```vlpt
 table
-# Row 1: The header row (optional)
+// Row 1: The header row (optional)
 tr
 th
  Header 1 Text
-end
+/ th
 th
  Header 2 Text
-end
-end
-# Row 2: A data row
+/ th
+/ tr
+// Row 2: A data row
 tr
-td
+.
  Cell A Text
-end
-td
+.
  Cell B Text
-end
-end
-# Row 3: Another data row
+/ tr
+// Row 3: Another data row
+tr
+.
+ Cell C Text
+.
+ Cell D Text
+/ tr
+/ table
+```
+
+
+
+
+
+
+
+
+
+
+## `.` marker or smart marker
+
+The `.` marker can be used as smart marker in order to facilitate typing Vlpt text for a human.
+
+The smart marker is not valid marker.
+ 
+A Vlpt tool must replace smart marker with another marker
+
+- In a ol block: The smart marker is replaced with a li block.
+- In a ul block: The smart marker is replaced with a li block.
+- In a tr block: The smart marker is replaced with a td block.
+
+
+
+
+### Example 1
+
+```vlpt
+table
+tr
+.
+ul
+.
+ text of the list item
+.
+ text of the list item
+.
+ text of the list item
+/ ul
+.
+ol
+.
+ text of the list item
+.
+ text of the list item
+.
+ text of the list item
+/ ol 
+/ tr
+/ table
+```
+
+That is translated into:
+
+```vlpt
+table
 tr
 td
- Cell C Text
-end
+ul
+li
+ text of the list item
+/ li 
+li
+ text of the list item
+/ li
+li
+ text of the list item
+/ li
+/ ul
+/ td
 td
- Cell D Text
-end
-end
-end
-```
+ol
+li
+ text of the list item
+/ li
+ text of the list item
+li
+ text of the list item
+/ li
+/ ol
+/ td 
+/ tr
+/ table
+
+
+That is translated this HTML:
+<table>
+    <tr>
+        <td>
+            <ul>
+                <li>
+                    text of the list item
+                </li>
+                <li>
+                    text of the list item
+                </li>
+                <li>
+                    text of the list item
+                </li>
+            </ul>
+        </td>
+        <td>
+            <ol>
+                <li>
+                    text of the list item
+                </li>
+                <li>
+                    text of the list item
+                </li>
+                <li>
+                    text of the list item
+                </li>
+            </ol>
+        </td>
+    </tr>
+</table>
+
 
 
 
