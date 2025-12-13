@@ -39,10 +39,6 @@ Alpine.js for compilation of Vlpt at runtime.
 - Vlpt text can be indented with horizontal tab characters before the marker.
     But Vlpt text is not meant indented. Instead section numbers ( e.g. 16.1.2.3 ) and other graphical indicators are used to indicate the current location in the document.
 - The programmer can write a marker and some tool might replace the marker with another marker that is less confusing for AI.
-- There is a Vlpt normalizer that rewrites Vlpt text.
-    - Humans can read and write Vlpt text with syntactic sugar.
-    - Vlpt with syntactic sugar is not valid until maybe later version of Vlpt.
-    - AI should read and write Vlpt text without syntactic sugar. 
 
 
 
