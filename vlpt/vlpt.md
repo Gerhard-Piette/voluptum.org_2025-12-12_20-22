@@ -35,10 +35,10 @@ Alpine.js for compilation of Vlpt at runtime.
 
 ## Unusual traits of Vlpt
 
-- A marker is a character or word at the beginning of a line and indicates how the line is compiled.
+- A marker is a character or word at the beginning of a line. A marker indicates how the line is compiled.
 - Vlpt text can be indented with horizontal tab characters before the marker.
-    But Vlpt text is not meant indented. Instead section numbers ( e.g. 16.1.2.3 ) and other graphical indicators are used to indicate the current location in the document.
-- The programmer can write a marker and some tool might replace the marker with another marker that is less confusing for AI.
+    - Vlpt tools offer the option to add no indentation to Vlpt text.
+    - The Vlpt editor can add section numbers ( e.g. 16.1.2.3 ) and other graphical indicators.
 
 
 
@@ -52,9 +52,6 @@ Alpine.js for compilation of Vlpt at runtime.
 ## Presented output
 
 Presented output should be presented to the consumer in some form.
-
-
-
 
 
 
@@ -763,7 +760,22 @@ quote
 
 
 
+## `li` marker for list item marker
+
+Like the li element in HTML.
+
+
+
+
+
+
+
+
+
+
 ## `ol` marker for ordered list
+
+Like the ol element in HTML.
 
 
 
@@ -771,17 +783,23 @@ quote
 
 ```vlpt
 ol
-.
+li
  text of the list item
-.
+/
+li
  text of the list item
-.
+/
+li
  text of the list item
+/
 / ol
 ```
 
-Where:
-- The . marker serves as separator of list items.
+
+
+### Presented output
+
+As ol element in HTML.
 
 
 
@@ -794,48 +812,31 @@ Where:
 
 ## `ul` marker for unordered ordered list
 
+Like the ul element in HTML.
+
 
 
 ### Example 1
 
 ```vlpt
 ul
-.
+li
  text of the list item
-.
+/
+li
  text of the list item
-.
+/
+li
  text of the list item
+/
 / ul
 ```
 
-Where:
-- The : marker serves as separator of list items.
 
 
+### Presented output
 
-
-
-
-
-
-
-
-## strike marker
-
-The strike marker is for strikethrough.
-
-Like the s tag in HTML.
-
-
-
-### Example 1
-
-```vlpt
-strike
- line
-/ strike
-```
+As ul element in HTML.
 
 
 
@@ -873,17 +874,21 @@ th
 / tr
 // Row 2: A data row
 tr
-.
+td
  Cell A Text
-.
+/
+td
  Cell B Text
+/
 / tr
 // Row 3: Another data row
 tr
-.
+td
  Cell C Text
-.
+/
+td
  Cell D Text
+/
 / tr
 / table
 ```
@@ -914,6 +919,8 @@ A Vlpt tool must replace smart marker with another marker
 
 ### Example 1
 
+Invalid VLPT text wth smart marker:
+
 ```vlpt
 table
 tr
@@ -939,7 +946,7 @@ ol
 / table
 ```
 
-That is translated into:
+That is translated into this valid Vlpt text:
 
 ```vlpt
 table
@@ -948,7 +955,7 @@ td
 ul
 li
  text of the list item
-/ li 
+/ li
 li
  text of the list item
 / li
