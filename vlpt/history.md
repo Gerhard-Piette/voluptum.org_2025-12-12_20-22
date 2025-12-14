@@ -9,6 +9,34 @@
 
 
 
+## 2025 12 14
+
+Major breaking changes.
+
+Vlpt comprises 3 languages:
+- program language
+- net language
+- app language
+ 
+Changed purpose of Vlpt.
+
+Added:
+- mod marker
+- Type
+- Module
+- Functions
+- Type parameter
+- ...
+
+
+
+
+
+
+
+
+
+
 ## 2025 12 14 - 14 44
 
 - Again memo because AI makes a distinction between doc and memo.

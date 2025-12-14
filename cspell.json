@@ -6,10 +6,13 @@
     "words": [
         "codepoint",
         "Gotenberg",
+        "Monomorphization",
+        "monomorphized",
         "Piette",
         "Vlpt",
         "Volupt",
-        "Voluptum"
+        "Voluptum",
+        "vtable"
     ],
     "ignoreWords": [],
     "import": []
