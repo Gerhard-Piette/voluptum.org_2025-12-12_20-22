@@ -8,7 +8,6 @@
 
 
 
-
 ## About Vlpt
 
 Vlpt is pronounced Volupt.
@@ -20,9 +19,6 @@ Vlpt is a text notation that offers:
 - text references
 - text formatting for presentation
 
-Vlpt text is compiled HTML and alpine.js.
-
-Alpine.js for compilation of Vlpt at runtime.
 
 
 
@@ -32,13 +28,27 @@ Alpine.js for compilation of Vlpt at runtime.
 
 
 
+## Usage of Vlpt
 
-## Unusual traits of Vlpt
+- For declaring styled structured text for humans, AI, and simpler programs. Like HTML and XML. 
+- For declaring application user interfaces.
+- For printing data. Notably with paged.js and Gotenberg.
 
-- A marker is a character or word at the beginning of a line. A marker indicates how the line is compiled.
-- Vlpt text can be indented with horizontal tab characters before the marker.
+
+
+
+
+
+
+
+
+
+## Unusual traits of Vlpt syntax
+
+- Markers at the begin of a line indicate how the line is compiled.
+- Vlpt text is valid and readable with and without indentation.
     - Vlpt tools offer the option to add no indentation to Vlpt text.
-    - The Vlpt editor can add section numbers ( e.g. 16.1.2.3 ) and other graphical indicators.
+    - The Vlpt editor can add section numbers ( e.g. 16_1_2_3 ) and other graphical indicators.
 
 
 
@@ -77,13 +87,7 @@ Compiled output is the output of the compilation of Vlpt text.
 
 ## Compiler
 
-Vlpt text is compiled to HTML and alpine.js.
-
-Alpine.js allows reactivity of output that is compiled at runtime.
-
-The compiler is implemented in the Rust language.
-
-Rust allows translation of Vlpt text at any time time including at runtime with WASM.
+The Vlpt compiler translates Vlpt text to HTML and Javascript.
 
 
 
@@ -147,150 +151,89 @@ These categories are generally dangerous, so we only allow specific useful chara
 
 
 
+## Empty line
+
+
+### Printed output
+
+An empty line has no printed output.
+
+
+
+
+### Compiled output
+
+An empty line is translated to an empty line by the compiler.
+
+
+
+
+
+
+
+
+
+
 ## Marker
 
-A marker is a character or word at the beginning of a line and indicates how the line is compiled.
+A marker is a character or name at the beginning of a line and indicates how the line is compiled.
 A marker must be followed by a space character (U+0020 SPACE, ASCII 32 ).
 
 
 
+### Key marker
 
+A key marker is like a keyword in other languages.
 
 
 
+### Name marker
 
+A name marker is a name that is not a key marker.
 
 
-## Block
 
-A block spans from a marker to a stop marker.
 
 
 
-### Marker block
 
-A marker block spans from marker to stop marker.
 
-```vlpt
-div
- text
-/
-```
 
-A div block spans from the div marker to the / marker.
 
+## Name
 
+A name is an identifier in other languages.
 
-### Round block
+Vlpt allows names for:
+- Files, folders, and packages with the import marker.
+- Block types.
+- Parameters.
 
-A round block spans from ( to ).
 
-A round block must not contain markers.
 
+### Reserved names
 
+- Names ( that begin with a lowercase latin letter ) are reserved for key markers.
 
 
 
+### Naming convention
 
+- A new name must begin with an uppercase latin letter or non-Ascii character.
+- PascalCase is recommended because this avoids AI context tokens for the low_line character (AKA underscore character).
 
 
 
 
-## ` ` marker or space marker
 
-The ` ` or space marker (U+0020 SPACE, ASCII 32 ) indicates a literal line.
 
 
 
-### Example
 
-```vlpt
- line with [class1 class2 "formatted"] text
-```
 
-Where:
-- The space marker indicates a text line with optional styled sections.
-- class1 and class3 are CSS classes.
-- [class1 class2 "formatted" ] is a styled section. The string content is formatted according to class1 and class2.
+## Stop marker as `/`
 
-
-
-### Printed output
-
-The printed output is the line including the line break character but without the ` ` marker.
-
-The string content of the formatted section is translated as span element and style attribute in HTML.
-
-
-
-
-
-
-
-
-
-
-## `pre` marker
-
-The pre marker is like the pre element in HTML and preserves all allowed characters including all whitespace.
-
-
-
-### Example
-
-```vlpt
-pre
- text where [class1 class2 "text" ] is not recognized for formatting
-/
-```
-
-
-
-### Printed output
-
-The pre block is translated into a pre element in HTML.
-
-
-
-
-
-
-
-
-
-
-## `//` marker or comment marker
-
-The `//` marker indicates a comment line.
-
-// is used because AI in 2025 is trained to use // for comments.
-
-
-
-### Example
-
-```vlpt
-// comment text
-```
-
-
-
-### Printed output
-
-A comment line has no printed output.
-
-
-
-
-
-
-
-
-
-
-## `/` marker or stop marker
-
-The `/` marker indicates the end or closing of a block.
+The stop marker indicates the end or closing of a block.
 
 
 
@@ -315,60 +258,30 @@ Where:
 
 
 
-## let marker
+## Comment marker as `//`
 
-The let marker allows to bind a name to an expression that is complete before the end of the line.
+The comment marker indicates a comment line.
 
-
-
-### let line
-
-A let line begins with let marker and stops at the end of the line.
-
-```vlpt
-let name1 = 2 + 3
-```
+// is used because AI in 2025 is trained to use // for comments.
 
 
 
-### Printed output
-
-A let line has no printed output.
-
-
-
-
-
-
-
-
-
-
-## def marker
-
-The def marker allows to bind a name to an expression that spans 1 or more multiple lines.
-
-
-
-### def block
-
-A def block begins with def marker and stops after the stop marker.
+### Example
 
 ```vlpt
-def name1 = expression
- that might might
- span multiple lines
-/ def
+// comment text
+ // as part of some text 
 ```
 
 Where:
-- The expression can contain text with markers.
+- // as marker indicates a comment.
+- // after the space marker is recognized as literal text //.
 
 
 
 ### Printed output
 
-A def block has no printed output unless the defined name is printed with the print marker.
+A comment line has no printed output.
 
 
 
@@ -379,34 +292,53 @@ A def block has no printed output unless the defined name is printed with the pr
 
 
 
-## `=` marker or print marker
+## Block
 
-The print marker indicates that the output of the following expression or of the defined variable is used as printed output.
+A block in Vlpt is similar to an element in HTML or a component in a js framework.
 
-Allowed whitespace characters are optional after the = marker.
+A block declaration spans from block marker to stop marker.
+
+Every block has a block type.
 
 
 
-### Print line
+### Example
 
-A print line begins with `=` marker and stops on the same line.
-
-The expression of the print line must be complete before the end of the line.
+A div block spans from the div marker to the / marker.
 
 ```vlpt
-= 1 + 2
-= let name1 = 1 + 2
-= name3
+div
+ text
+/
+```
+
+
+
+
+
+
+
+
+
+
+## Block content
+
+A block content is the content between the line with the block marker and the line with the corresponding stop marker.
+
+
+
+### Example
+
+A div block spans from the div marker to the / marker.
+
+```vlpt
+div
+ text
+/
 ```
 
 Where:
-- The value of name1 is printed after the assignment to the result of 1 + 2.
-
-
-
-### Printed output
-
-The printed output is the printed output of the expression or variable after assignment.
+- text is div content or content of a div block.
 
 
 
@@ -417,38 +349,187 @@ The printed output is the printed output of the expression or variable after ass
 
 
 
-## Name
+## Inner block
 
-A name is a word and like an identifier in other languages.
-
-A name is a public name except when the name is a private name.
-- id marker
-- private marker
-
-Most Unicode characters can be name characters except:
-- In the ASCII range: Only - and _ and digits and latin letters are allowed as name character.
-- Space characters are not allowed in a name.
+An inner block is declared within an outer block.
 
 
 
-### Naming convention
-
-camelCase names with lowercase first character are preferred because this saves tokens in AI context. 
-
-Respecting naming conventions is recommended but not required.
-
-The Vlpt writer can declare names according to its own preferences.
 
 
 
-### Local name
 
-A local name is a name declared after these markers:
-- let
-- private
-- import
 
-A local name can also be declared after the id attribute name.
+
+
+## Outer block
+
+An outer block contains 1 or more inner blocks.
+
+
+
+
+
+
+
+
+
+
+## Block type
+
+The content of a Vlpt file is a block type declaration.
+
+A black type is used to create a block.
+
+
+
+
+
+
+
+
+
+
+## Parameter
+
+In Vlpt: A parameter means a parameter of a block type.
+
+
+
+### Parameter line
+
+A parameter line contains the definition of a parameter on a single line.
+
+
+
+### Parameter block
+
+A parameter block is declared as block over multiple lines.
+
+
+
+### Implicit parameter declaration
+
+The param marker indicates the implicit parameter.
+
+
+
+### Explicit parameter declaration
+
+An explicit parameter has a user defined name.
+
+```vlpt
+Name1 = "default text"
+
+Name2 =
+ default text
+/
+```
+
+Where:
+- Outside of block content: The = character after a name marker indicates a parameter definition.
+- If the parameter name is followed by a string then the parameter definition is a parameter line. Like for the Name1 parameter in the example.
+- If the parameter name is followed by block content then the parameter definition is a parameter block. Like for the Name2 parameter in the example.
+
+
+
+### Added Parameter
+
+An explicit parameters can be added to an inner block in the outer block.
+
+```vlpt
+Name1
+Name9 = "default text"
+/
+```
+
+Where:
+- Name9 is an added parameter if Name9 is not defined in the Name1 type.
+
+
+
+### Removed Parameter
+
+A explicit parameter can be removed from an inner block in the outer block.
+
+```vlpt
+Name1
+Name9 #
+/
+```
+
+Where:
+- The # character after Name9 means to remove Name9 from the block with Name1 type.
+
+
+
+
+
+
+
+
+
+
+### Parameter usage
+
+```vlpt
+Name1
+param
+```
+
+Where:
+- The parameter Name1 is used as a marker.
+- The param marker stands for the implicit parameter.
+- A parameter is replaced with the argument of the parameter. 
+
+
+
+
+
+
+
+
+
+
+## Argument
+
+In Vlpt: An argument is a string or block content that is bound to a block parameter.
+
+
+
+### Argument line
+
+An argument line contains the binding of parameter and string as argument.
+
+
+
+### Parameter block
+
+An argument block contains the binding of parameter and a block content as argument.
+
+
+
+### Argument declaration
+
+```vlpt
+Name1 = "argument1"
+
+Name2 =
+ argument2
+/ Name2
+
+div
+ style = "class1"
+ argument3
+/ div
+```
+
+Where:
+- In block content: The = character after a marker indicates the binding of an explicit parameter to an argument.
+- Name1 is a parameter that is bound to the string "argument1" as argument.
+- Name2 is a parameter that is bound to the Name2 content as argument.
+- The "class1" string is bound to the explicit style parameter of the div block. An explicit parameter is like an attribute in HTML.
+- The argument3 div content is bound to the implicit parameter of the div type because that content does not follow any = character.
 
 
 
@@ -495,6 +576,8 @@ Vlpt allows only 2 kinds of string limits:
 The string content are the characters between the string limits.
 
 Only allowed characters are allowed in string content.
+
+The Vlpt compiler does not recognize markers in string content. A block with block semantics can not be declared in string content.
 
 
 
@@ -545,22 +628,17 @@ The printed output of a string is the string content.
 
 
 
-## Package
-
-Vlpt text allows to reference files including files with Ecmascript and Typescript code.
-
-A package is a zip file with a folder structure that can comprise arbitrary files and folder.
+## Package system
 
 
 
+### Package
+
+A package is a zip file that contains a folder that can contain files and folders.
 
 
 
-
-
-
-
-## Package management
+### Package management
 
 A package is identified by its identifier.
 
@@ -577,6 +655,287 @@ There is no semantic versioning for Vlpt packages.
 This removes dependency hell. This facilitates much for the writer and reader of Vlpt text because there is .
 
 [Version SAT](https://research.swtch.com/version-sat)
+
+
+
+
+
+
+
+
+
+
+## HTML in Vlpt
+
+Vlpt does not allow HTML text.
+
+
+
+### HTML elements in Vlpt
+
+Vlpt offers a marker for most HTML elements.
+
+
+
+### Unsupported HTML elements
+
+| HTML Element | Status | Comment |
+| :--- | :--- | :--- |
+| **HTML comments** | **Excluded** | Replaced with comment marker |
+| **`<!DOCTYPE>`** | **Excluded** | Compiler generates what is necessary. |
+| **`html`** | **Excluded** | Compiler generates what is necessary. |
+| **`body`** | **Excluded** | Compiler generates what is necessary. |
+| **`style`** | **Excluded** | Replaced with css marker. |
+| **`br`** | **Excluded** | Replaced with plus modifier and default settings of markers. |
+| **`frame`** | **Excluded** | Use iframe marker or CSS Grid layout. |
+| **`frameset`** | **Excluded** | Use iframe marker or CSS Grid layout. |
+| **`applet`** | **Excluded** | Obsolete technology; security risk. Use `object`. |
+| **`embed`** | **Excluded** | Obsolete technology. Use `object`. |
+| **`font`** | **Excluded** | Use CSS. |
+| **`center`** | **Excluded** | Use CSS. |
+| **`strike`** | **Excluded** | Use CSS. |
+| **`big`** | **Excluded** | Use CSS. |
+| **`tt`** | **Excluded** | Use CSS. |
+| **`dir`** | **Excluded** | Use the `ul` marker. |
+| **`acronym`** | **Excluded** | Use the `abbr` marker. | 
+
+
+
+### HTML attributes in Vlpt
+
+Parameters correspond to HTML attributes.
+
+
+
+
+
+
+
+
+
+
+## CSS in Vlpt
+
+Vlpt offers the css marker for use of CSS.
+
+
+
+
+
+
+
+
+
+
+## css marker
+
+The css marker allows to declare CSS rules that can be referenced within the block content in which the css block is declared.
+
+The css content is CSS text.
+
+
+
+### Example
+
+```vlpt
+div
+css
+ .class1 {
+    width: 100em;
+ }
+/ css
+/ div
+```
+
+
+
+### CSS overriding
+
+Within a block: The local CSS overrides conflicting CSS from an outer block.
+
+
+
+### Implicit CSS classes in Vlpt
+
+Vlpt offer the following CSS classes that can be overridden:
+- Class b for bold.
+- Class center in CSS.
+- Class i for italic.
+- Class t for line-through in CSS.
+- Class u for underline in CSS.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Space marker as ` `
+
+The space marker as space character (U+0020 SPACE, ASCII 32 ) indicates a text line that can contain styled sections.
+
+
+
+### Example
+
+```vlpt
+ line with [class1 class2 "formatted"] text
+```
+
+Where:
+- The space marker indicates a text line with optional styled sections.
+- class1 and class3 are CSS classes.
+- [class1 class2 "formatted" ] is a styled section. The string content is formatted according to class1 and class2.
+
+
+
+### Printed output
+
+The printed output is the line including the line break character but without the ` ` marker.
+
+The string content of the formatted section is translated as span element and style attribute in HTML.
+
+
+
+
+
+
+
+
+
+
+## pre marker
+
+The pre marker is like the pre element in HTML and preserves all allowed characters including all whitespace.
+
+
+
+### Example
+
+```vlpt
+pre
+ text where [class1 class2 "text" ] is not recognized for formatting
+/
+```
+
+
+
+### Printed output
+
+The pre block is translated into a pre element in HTML.
+
+
+
+
+
+
+
+
+
+
+## import marker
+
+The import marker allows to bind a local name to:
+- a local Vlpt file
+- a local folder with Vlpt files
+- A remote Vlpt package that is offered by a web service. 
+
+
+
+### Import name
+
+The import name is the name that follows the import marker.
+
+
+
+### Example with a local file
+
+```vlpt
+import Name1 "file2.vlpt"
+import Name3 "./file4.vlpt"
+import Name5 "folder6/file7.vlpt"
+import Name8 "./folder9/file10.vlpt"
+```
+
+Where:
+- "file2.vlpt" indicates file2f.vlpt in the working folder of the compiler.
+- "./file4.vlpt" indicates file4.vlpt besides the importing file.
+
+
+
+### Example with a local folder
+
+```vlpt
+import Name1 "folder2"
+import Name3 "./folder4"
+```
+
+Where:
+- Name1 stands for the folder2 in the working folder of the compiler.
+- Name3 stands for the folder4 besides the importing file.
+
+
+
+### Example with a Vlpt package
+
+```vlpt
+import Name1 "URI"
+```
+
+Where:
+- Name1 stands for the Vlpt package at the indicated URI.
+
+
+
+### Use of a file name
+
+```vlpt
+import Name1 "file"
+Name1
+```
+
+Where:
+- Name1 stands for a file and the block type defined in that file. The content of a Vlpt file is a block type declaration.
+
+
+
+### Use of a folder name
+
+```vlpt
+import Name1 "folder"
+Name1.Name2
+```
+
+Where:
+- Name1 stands for the folder.
+- Name1.Name2 means access of the file or folder in folder Name1.
+
+
+
+### Use of a package name
+
+```vlpt
+import Name1 "URI"
+Name1.Name2
+```
+
+Where:
+- Name1 stands for a package. The package content is always a folder.
+- Name1.Name2 means access of the file or folder in package Name1.
+
+
+
+### Limitations
+
+- Vlpt does not allow circular references among loaded files. This facilitates much for the writer and reader of Vlpt text.
+    - [Cyclic dependencies are evil](https://fsharpforfunandprofit.com/posts/cyclic-dependencies/)
 
 
 
@@ -613,28 +972,9 @@ Where:
 
 
 
-## import marker
+## param marker
 
-The import marker allows to bind a local name to the content of another file.
-
-
-
-### Example 1
-
-```vlpt
-import name1 "URI"
-import name2 "./script.ts"
-```
-
-Where:
-- URI is the URI of a file.
-- script.ts is some file with Typescript code. All exported symbols must be prefixed with "name2." for use.
-
-
-
-### Limitations
-
-- Vlpt does not allow circular references among loaded files. This facilitates much for the writer and reader of Vlpt text.
+The param marker is the implicit parameter and stands for the argument that is bound to the implicit parameter.
 
 
 
@@ -645,71 +985,20 @@ Where:
 
 
 
-## private marker
+## doc marker
 
-The private marker is used to define a private local name.
-
-A private name is only accessible in the same Vlpt file. A private name is not directly accessible from an imported file.
+The doc marker is used to declare documentation about the outer block that contains the doc block.
 
 
 
-### Example 1
+### Example
 
 ```vlpt
-private name1 = expression
-```
+doc "some documentation"
 
-
-
-
-
-
-
-
-
-
-## memo marker
-
-The memo marker is used to declare a memo.
-
-A memo contains text about how to understand and interpret Vlpt text.
-
-A memo can be useful to declare anything including special syntax and semantics.
-
-
-
-### Declaration of file memo
-
-There is only 0 or 1 file memo per file. The file memo applies to the Vlpt text after the file memo until the end of the file.
-
-A file memo has no name.
-
-```vlpt
-memo
-    content
-/ memo
-```
-
-
-
-### Declaration of named memo
-
-The memo marker is followed by the name of the memo. A named memo is not applied implicitly. 
-
-```vlpt
-memo name
-    content
-/ memo
-```
-
-
-
-### Memo copy
-
-A named memo can be copied into another memo. The copied memo is part of the receiver memo. The copy of a memo has no other effect.
-
-```vlpt
-= memoName
+doc
+ content
+/ doc
 ```
 
 
@@ -724,34 +1013,6 @@ A named memo can be copied into another memo. The copied memo is part of the rec
 ## B marker
 
 Every B marker begins a block.
-
-
-
-
-
-
-
-
-
-
-## `,` marker
-
-The `,` marker allows to declare an attribute related to the current block.
-
-
-
-### Example
-
-```vlpt
-div
-, id "some id"
-, style = class1 class2
-, width = 200px
-, height = 200px
- text
- text
-/ div
-```
 
 
 
@@ -803,31 +1064,23 @@ h6
 
 
 
-## `quote` marker for quotes
+## quote marker
+
+Like the backquote and q element in HTML.
+
 
 
 ### Example
 
 ```vlpt
 quote
-    content
-    content
+cite = "URI"
+ content
+/ quote
 ```
 
 Where:
-- The > character must be the first non-whitespace character on the line. 
-
-
-
-### Example
-
-```vlpt
-quote
-, source "uri1"
-, source "uri2"
- content
- content
-```
+- cite is an explicit parameter.
 
 
 
@@ -838,7 +1091,7 @@ quote
 
 
 
-## `li` marker for list item marker
+## li marker for list item marker
 
 Like the li element in HTML.
 
@@ -851,7 +1104,7 @@ Like the li element in HTML.
 
 
 
-## `ol` marker for ordered list
+## ol marker for ordered list
 
 Like the ol element in HTML.
 
@@ -888,7 +1141,7 @@ As ol element in HTML.
 
 
 
-## `ul` marker for unordered ordered list
+## ul marker for unordered ordered list
 
 Like the ul element in HTML.
 
@@ -929,11 +1182,29 @@ As ul element in HTML.
 
 Table markers are similar to HTML table tags.
 
-In Vlpt:
-- table for table marker like in HTML.
-- tr for table row marker like in HTML.
-- th for table header marker like in HTML.
-- td for table data marker like in HTML.
+
+
+### table marker
+
+Like the table element in HTML.
+
+
+
+### tr marker
+
+Like the tr element in HTML.
+
+
+
+### th marker
+
+Like the th element in HTML.
+
+
+
+### td marker
+
+Like the td element in HTML.
 
 
 
@@ -980,104 +1251,22 @@ td
 
 
 
-## com marker
+## Modifier
 
-The com marker is used to define a component.
+A modifier can be declared after a block type name or parameter.
 
+Multiple modifiers on the same line are allowed.
 
-
-### Component type definition
-
-```vlpt
-com Card
-, title: string = "no title"
-, content
-, footer
- text1
-= title
- text2
-= content
- text3
-= footer
- text4
-/ com
-```
-
-Where:
-- The com marker indicates a com block for a component type definition.
-- The com marker is followed by the component type name.
-- title, content, and footer are attributes or properties of the component.
-- Vlpt offers an optional types system that is meant for humans and AI. The Vlpt compiler might never offer a complete type checker.
-- The type string indicates a string value.
-- "no title" is a default value for the title attribute.
-- An attribute declaration ( that is not followed by a colon and type ) is a slot attribute and stands for Vlpt text.
+The equal modifier must be the last modifier in a sequence of modifiers.
 
 
 
-### Component instance
-
-
-
-#### Example 1
-```vlpt
-Card
-, title = "Good title"
-content
- text for content slot
-/ content
-footer
- text for footer slot
-/ footer
-/ Card
-```
-
-Where:
-- Card is a component type name.
-- If the = marker followed by a component type name then a component of that type is created.
-- The component is translated to printed output is indicated by the = marker.
-
-
-
-#### Example 2
+### Example
 
 ```vlpt
-def card1 = Card
-, title = "Good title"
-content
- text for content slot
-/ content
-footer
- text for footer slot
-/ footer
-/ Card
-/ def
-```
-
-Where:
-- Card is a component type name.
-- The variable card1 is bound to the new Card.
-
-
-
-
-
-
-
-
-
-
-## do marker
-
-The do marker is used to contain text in the do language that is a Vlpt specific programming language.
-
-
-
-### Example 
-
-```vlpt
-do
- text in the do language
-/ do
+Name - =
+ content
+/
 ```
 
 
@@ -1089,11 +1278,9 @@ do
 
 
 
-## Do language
+## Equal modifier as `=`
 
-The do language is not determined yet.
-
-The do language is used in a do block.
+The equal modifier indicates the binding of an explicit parameter to an argument.
 
 
 
@@ -1104,114 +1291,176 @@ The do language is used in a do block.
 
 
 
-## `.` marker or smart marker
+## Minus modifier as `-`
 
-The `.` marker can be used as smart marker in order to facilitate typing Vlpt text for a human.
-
-The smart marker is not valid marker.
- 
-A Vlpt tool must replace smart marker with another marker
-
-- In a ol block: The smart marker is replaced with a li block.
-- In a ul block: The smart marker is replaced with a li block.
-- In a tr block: The smart marker is replaced with a td block.
+The minus modifier indicates that the printed output is printed on the same line as the previous output.
 
 
 
 
-### Example 1
 
-Invalid VLPT text wth smart marker:
+
+
+
+
+
+## Plus modifier as `+`
+
+The plus modifier indicates that the printed output is printed on new line.
+
+
+
+
+
+
+
+
+
+
+## Template system
+
+The Vlpt compiler can use only Vlpt text.
+
+Vlpt can import only Vlpt text.
+
+Vlpt does not offer computation, branching, and iteration like other template systems.
+
+The Vlpt compiler offers an API that allows to create Vlpt blocks and to pass arguments to block parameters.
+
+
+
+
+
+
+
+
+
+
+## UI, script, and reactivity 
+
+UI = user interface.
+
+Vlpt offers:
+- The script marker that is like the script element in HTML.
+- Parameters that are like attributes in HTML.
+
+
+
+
+
+
+
+
+
+
+## Dot marker as `.`
+
+The dot marker should be immediately replaced by the tool by another marker.
+
+The dot marker is not a valid marker in Vlpt text.
+
+
+
+### Dot for li
+
+```vlpt
+ol
+.
+```
+
+Replaced by:
+
+```vlpt
+ol
+li
+/li
+```
+
+
+
+### Dot for tr
+
+```vlpt
+table
+.
+```
+
+Replaced by:
+
+```vlpt
+table
+tr
+/ tr
+```
+
+
+
+### Dot for th
 
 ```vlpt
 table
 tr
 .
-ul
-.
- text of the list item
-.
- text of the list item
-.
- text of the list item
-/ ul
-.
-ol
-.
- text of the list item
-.
- text of the list item
-.
- text of the list item
-/ ol 
-/ tr
-/ table
 ```
 
-That is translated into this valid Vlpt text:
+Replaced by:
+
+```vlpt
+table
+tr
+th
+/ th
+```
+
+
+
+### Dot for th
+
+```vlpt
+table
+tr
+th
+ content
+/
+.
+```
+
+Replaced by:
+
+```vlpt
+table
+tr
+th
+ content
+/
+th
+/ th
+```
+
+
+
+### Dot for td
 
 ```vlpt
 table
 tr
 td
-ul
-li
- text of the list item
-/ li
-li
- text of the list item
-/ li
-li
- text of the list item
-/ li
-/ ul
+ content
+/ td
+.
+```
+
+Replaced by:
+
+```vlpt
+table
+tr
+td
+ content
 / td
 td
-ol
-li
- text of the list item
-/ li
- text of the list item
-li
- text of the list item
-/ li
-/ ol
-/ td 
-/ tr
-/ table
-
-
-That is translated this HTML:
-<table>
-    <tr>
-        <td>
-            <ul>
-                <li>
-                    text of the list item
-                </li>
-                <li>
-                    text of the list item
-                </li>
-                <li>
-                    text of the list item
-                </li>
-            </ul>
-        </td>
-        <td>
-            <ol>
-                <li>
-                    text of the list item
-                </li>
-                <li>
-                    text of the list item
-                </li>
-                <li>
-                    text of the list item
-                </li>
-            </ol>
-        </td>
-    </tr>
-</table>
+/ td
+```
 
 
 

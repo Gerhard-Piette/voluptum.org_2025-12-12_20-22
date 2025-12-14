@@ -9,6 +9,76 @@
 
 
 
+## 2025 12 14
+
+Major breaking changes.
+
+### Implementation
+
+- Probably with Vue.js for performance, features (no build step like svelte and solid), and libraries.
+- With paged.js and Gotenberg for printing.
+
+### Block system
+
+- Most markers are names of block types and parameters.
+
+### Template system
+
+- Vlpt is Vlpt first and only. Vlpt can import only Vlpt text.
+- Vlpt is not an orchestrator.
+- Vlpt does not offer computation, branching, and iteration like other template systems.
+- The Vlpt compiler offers an API that allows to create Vlpt blocks and to pass arguments to block parameters.
+- No if marker.
+- No else marker.
+- No for marker.
+- No code.
+- No variables except parameters.
+
+### Package system
+
+- Filesystem based.
+- import is used as alias for a folder of file or package.
+
+### Removed markers
+
+- Removed com marker.
+- Removed do marker.
+- Removed let marker.
+- Removed def marker.
+- Removed = marker.
+- Removed private marker.
+- Removed , marker.
+- Removed memo marker.
+
+### Added concepts and markers
+
+- Parameter
+- Argument
+- param marker for implicit parameter.
+- css marker
+- Block content
+- Inner block
+- Outer block
+- Template system
+- HTML in Vlpt
+- CSS in Vlpt
+- UI system
+- Modifier
+
+### Improved
+
+- Dot marker. Before: smart marker.
+- Doc marker
+
+
+
+
+
+
+
+
+
+
 ## 2025 12 13
 
 - Changes to improve Vlpt for AI according to Gemini 3 Pro:
