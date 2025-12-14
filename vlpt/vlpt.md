@@ -8,6 +8,7 @@
 
 
 
+
 ## About Vlpt
 
 Vlpt is pronounced Volupt.
@@ -28,11 +29,12 @@ Vlpt is a text notation that offers:
 
 
 
-## Usage of Vlpt
+## Intended usage of Vlpt
 
-- For declaring styled structured text for humans, AI, and simpler programs. Like HTML and XML. 
-- For declaring application user interfaces.
-- For printing data. Notably with paged.js and Gotenberg.
+- For structured text for multimedia communication for humans, AI, and simpler programs. Vlpt text should be optimal for multi-modal communication between humans and AI.
+- For websites that are optimal for search engines.
+- For reactive user interfaces of applications.
+- Features related to printing are welcome but have no priority because Vlpt is meant for an efficient convenient world without polluting, wasteful, limiting, printed documents.
 
 
 
@@ -304,10 +306,10 @@ Every block has a block type.
 
 ### Example
 
-A div block spans from the div marker to the / marker.
+A col block spans from the col marker to the / marker.
 
 ```vlpt
-div
+col
  text
 /
 ```
@@ -329,16 +331,16 @@ A block content is the content between the line with the block marker and the li
 
 ### Example
 
-A div block spans from the div marker to the / marker.
+A col block spans from the col marker to the / marker.
 
 ```vlpt
-div
+col
  text
 /
 ```
 
 Where:
-- text is div content or content of a div block.
+- text is col content or content of a col block.
 
 
 
@@ -518,18 +520,18 @@ Name2 =
  argument2
 / Name2
 
-div
+box
  style = "class1"
  argument3
-/ div
+/ box
 ```
 
 Where:
 - In block content: The = character after a marker indicates the binding of an explicit parameter to an argument.
 - Name1 is a parameter that is bound to the string "argument1" as argument.
 - Name2 is a parameter that is bound to the Name2 content as argument.
-- The "class1" string is bound to the explicit style parameter of the div block. An explicit parameter is like an attribute in HTML.
-- The argument3 div content is bound to the implicit parameter of the div type because that content does not follow any = character.
+- The "class1" string is bound to the explicit style parameter of the box block. An explicit parameter is like an attribute in HTML.
+- The argument3 box content is bound to the implicit parameter of the box type because that content does not follow any = character.
 
 
 
@@ -542,7 +544,55 @@ Where:
 
 ## Number
 
-A number can be declared in any sensible way.
+These patterns use `[0-9]` instead of `\d` to enforce strict ASCII digits, ensuring high compatibility with code parsers and avoiding Unicode normalization issues.
+
+
+
+### Unsigned Integer
+
+Matches strict positive whole numbers.
+
+```rust
+r"^[0-9]+$"
+```
+
+
+
+### Signed Integer
+
+Matches whole numbers with an optional `+` or `-` sign.
+
+```rust
+r"^[+-]?[0-9]+$"
+```
+
+
+
+### Floating Point Number (Standard)
+
+Matches decimal numbers. This pattern requires at least one digit before and after the dot (e.g., `0.5` not `.5`) to minimize ambiguity for tokenizers.
+
+```rust
+r"^[+-]?[0-9]+\.[0-9]+$"
+```
+
+
+
+### Number with Scientific Notation
+
+Matches numbers with an exponent. This covers integer-scientific (`1e10`) and float-scientific (`1.5E-10`) formats.
+
+```rust
+r"^[+-]?[0-9]+(?:\.[0-9]+)?[eE][+-]?[0-9]+$"
+```
+
+
+
+### Why these are "Optimal for AI" in Vlpt
+
+* **No Underscores:** Vlpt recommends avoiding underscores in names to save "AI context tokens". These regexes strictly exclude underscores (like `1_000`) for the same reason—keeping tokens dense and standard.
+* **Determinism:** No ambiguity by enforcing a standard JSON-compatible format.
+* **Simplicity:** They avoid look-arounds, making them performant and safe for "simpler programs" that might be parsing the Vlpt output.
 
 
 
@@ -644,7 +694,7 @@ A package is identified by its identifier.
 
 The package identifier can be any string and should include the version number.
 
-The package manager should also require a certain checksum for package identification in order verify the content of a package.
+The package manager can use checksums to verify the content of a package for security and reproducibility.
 
 There is no compatibility packages with a different identifier.
 
@@ -667,37 +717,15 @@ This removes dependency hell. This facilitates much for the writer and reader of
 
 ## HTML in Vlpt
 
-Vlpt does not allow HTML text.
+Vlpt is not based on HTML.
+
+The compiler translates Vlpt text to HTML and Ecmascript.
 
 
 
 ### HTML elements in Vlpt
 
-Vlpt offers a marker for most HTML elements.
-
-
-
-### Unsupported HTML elements
-
-| HTML Element | Status | Comment |
-| :--- | :--- | :--- |
-| **HTML comments** | **Excluded** | Replaced with comment marker |
-| **`<!DOCTYPE>`** | **Excluded** | Compiler generates what is necessary. |
-| **`html`** | **Excluded** | Compiler generates what is necessary. |
-| **`body`** | **Excluded** | Compiler generates what is necessary. |
-| **`style`** | **Excluded** | Replaced with css marker. |
-| **`br`** | **Excluded** | Replaced with plus modifier and default settings of markers. |
-| **`frame`** | **Excluded** | Use iframe marker or CSS Grid layout. |
-| **`frameset`** | **Excluded** | Use iframe marker or CSS Grid layout. |
-| **`applet`** | **Excluded** | Obsolete technology; security risk. Use `object`. |
-| **`embed`** | **Excluded** | Obsolete technology. Use `object`. |
-| **`font`** | **Excluded** | Use CSS. |
-| **`center`** | **Excluded** | Use CSS. |
-| **`strike`** | **Excluded** | Use CSS. |
-| **`big`** | **Excluded** | Use CSS. |
-| **`tt`** | **Excluded** | Use CSS. |
-| **`dir`** | **Excluded** | Use the `ul` marker. |
-| **`acronym`** | **Excluded** | Use the `abbr` marker. | 
+The compiler determines the implementation.
 
 
 
@@ -738,13 +766,13 @@ The css content is CSS text.
 ### Example
 
 ```vlpt
-div
+box
 css
  .class1 {
     width: 100em;
  }
 / css
-/ div
+/ box
 ```
 
 
@@ -799,37 +827,6 @@ Where:
 ### Printed output
 
 The printed output is the line including the line break character but without the ` ` marker.
-
-The string content of the formatted section is translated as span element and style attribute in HTML.
-
-
-
-
-
-
-
-
-
-
-## pre marker
-
-The pre marker is like the pre element in HTML and preserves all allowed characters including all whitespace.
-
-
-
-### Example
-
-```vlpt
-pre
- text where [class1 class2 "text" ] is not recognized for formatting
-/
-```
-
-
-
-### Printed output
-
-The pre block is translated into a pre element in HTML.
 
 
 
@@ -987,7 +984,9 @@ The param marker is the implicit parameter and stands for the argument that is b
 
 ## doc marker
 
-The doc marker is used to declare documentation about the outer block that contains the doc block.
+The doc marker is used to instruct the user of a block.
+
+The doc block is related to the outer block.
 
 
 
@@ -999,6 +998,35 @@ doc "some documentation"
 doc
  content
 / doc
+```
+
+
+
+
+
+
+
+
+
+
+## memo marker
+
+The memo marker is used to instruct the creator of a block.
+
+The memo block is related to the outer block.
+
+
+
+### Example
+
+```vlpt
+col
+doc "Primary user profile card displayed on the dashboard."
+memo
+ TODO: Refactor the image loading logic.
+ AI Instruction: Ensure this block is responsive on mobile screens.
+/
+/
 ```
 
 
@@ -1023,36 +1051,142 @@ Every B marker begins a block.
 
 
 
-## H marker or header marker
+## Markers for layout and flow
+
+| Marker | Behavior |
+| :--- | :--- |
+| **`col`** | **Vertical Stack**. Default flow. Items arrange top-to-bottom. |
+| **`row`** | **Horizontal Flow**. Items arrange left-to-right. |
+| **`grid`** | **2D Grid**. Content flows into defined cells/columns. |
+| **`layer`** | **Z-Stack**. Items overlay on top of each other. |
+| **`gap`** | **Spacer**. Explicit spacing (e.g., `gap "2em"`). |
+
+
+
+
+
+
+
+
+
+
+## Markers for surface (containers)
+
+| Marker | Role | SEO Value | Visual Behavior |
+| :--- | :--- | :--- | :--- |
+| **`box`** | **Visual Wrapper** | Low (Generic) | The only element that can be target of CSS for rectangle styles. <br>*Example:* `box style="card"` |
+| **`main`** | **Primary Content** | **High** | Invisible container. Marks the unique content. |
+| **`nav`** | **Navigation** | **High** | Invisible container. Marks site links. |
+| **`aside`** | **Sidebar / Tangential** | Medium | Invisible container. Marks ads/biographies. |
+| **`art`** | **Article** | **High** | Invisible container. Marks syndicatable content. |
+| **`sect`** | **Section** | Medium | Invisible container. Groups thematic content. |
+
+
+
+
+
+
+
+
+
+
+## Markers for content (Text & Media)
+
+| Marker | Behavior |
+| :--- | :--- |
+| **` `** | **Text line**. The space marker indicates a text line. |
+| **`txt`** | **Text block**. Merges text lines into a single flowing paragraph. Styled sections are recognized. |
+| **`code`** | **Text block**. Like txt but preserves characters exactly as written. No styled sections. |
+| **`math`** | **Text block**. Renders accessible MathML/Latex (e.g. via MathJax).. |
+| **`head`** | **Heading**. The level is automatically determined by the compiler based on block nesting. |
+| **`img`** | **Image**. Handles visual assets. |
+| **`icon`** | **Icon**. Semantic symbols (SVG/Font). |
+
+
+
+
+
+
+
+
+
+
+## Markers for lists and tables
+
+*Abstract data structures allow the compiler to choose the best view (table vs. grid).*
+
+| Marker | Behavior |
+| :--- | :--- |
+| **`list`** | **Sequence**. A simple list of items (bullet/numbered). |
+| **`item`** | **Entry**. An item within a list. |
+| **`data`** | **Structured Set**. Replaces `table`. |
+| **`row`** | **Data Row**. A group of fields in the set. |
+| **`fld`** | **Data Field**. A single cell of data. |
+
+
+
+
+
+
+
+
+
+
+## Markers for interaction (UI)
+
+*Functional elements only.*
+
+| Marker | Behavior |
+| :--- | :--- |
+| **`act`** | **Action**. For interaction. Interaction might be multi-modal. E.g. buttons and Links. <br>*Param:* `do="save"` or `to="/home"`. |
+| **`inp`** | **Input**. Text fields, checkboxes, etc. |
+
+
+
+
+
+
+
+
+
+
+## Markers for metadata for search engines
+
+| Marker | Behavior |
+| :--- | :--- |
+| **`title`** | **Page Title**. The most critical SEO signal. Sets the browser tab title and search result headline. |
+| **`meta`** | **Metadata**. Defines description, viewport, and robots directives. <br>*Params:* `name`, `content`. |
+| **`link`** | **Resource Link**. Defines canonical URLs to prevent duplicate content issues. <br>*Params:* `rel`, `href`. |
+
+
+
+
+
+
+
+
+
+
+## book marker
+
+Vlpt abstracts the complexity of paged media (PDF, Paper). The compiler is responsible for translating these high-level markers into the necessary CSS (e.g., Paged Media Module) and scripts (e.g., Paged.js).
+
+The book marker defines the physical properties of the document and acts as the container for print-specific configuration.
+
+
+
+### Parameters
+- **`size`**: Sets the paper size (e.g., "A4", "Letter").
+- **`margins`**: Sets the global page margins.
 
 
 
 ### Example
 
 ```vlpt
-h1
- text of a h1 header
-/ h1
-
-h2
- text of a h2 header
-/ h2
-
-h3
- text of a h3 header
-/ h3
-
-h4
- text of a h4 header
-/ h4
-
-h5
- text of a h5 header
-/ h5
-
-h6
- text of a h6 header
-/ h6
+book size="A4" margins="2.5cm"
+  // Running elements are defined here
+/
 ```
 
 
@@ -1064,23 +1198,48 @@ h6
 
 
 
-## quote marker
+## run marker
 
-Like the backquote and q element in HTML.
+The run marker defines "running content" (headers and footers) that repeats on every page.
+
+
+
+### Parameters
+
+**`area`**: The position on the page.
+    - `top-left`, `top-center`, `top-right`
+    - `bottom-left`, `bottom-center`, `bottom-right`
 
 
 
 ### Example
 
 ```vlpt
-quote
-cite = "URI"
- content
-/ quote
+book
+ run area="top-center"
+  txt "Project Documentation"
+ /
+ run area="bottom-right"
+  txt "Page {page} of {pages}"
+ /
+/
 ```
 
-Where:
-- cite is an explicit parameter.
+
+
+
+
+
+
+
+
+
+## toc marker
+
+The toc marker automatically generates a Table of Contents based on the `head` (heading) blocks in the document.
+
+  - **Web output**: A navigation list with clickable links.
+  - **Print output**: A list with leader dots and calculated page numbers.
 
 
 
@@ -1091,46 +1250,23 @@ Where:
 
 
 
-## li marker for list item marker
+## note marker
 
-Like the li element in HTML.
-
-
-
-
+The note marker indicates a footnote or tangential reference.
+- **Web output**: Renders as a tooltip or a clickable number linking to an end-of-text section.
+- **Print output**: Renders as a traditional footnote at the bottom of the physical page area.
 
 
 
-
-
-
-## ol marker for ordered list
-
-Like the ol element in HTML.
-
-
-
-### Example 1
+### Example
 
 ```vlpt
-ol
-li
- text of the list item
-/
-li
- text of the list item
-/
-li
- text of the list item
-/
-/ ol
+txt "Revenue grew by 50% "
+note "Q3 Financial Report, 2024"
 ```
 
 
 
-### Printed output
-
-As ol element in HTML.
 
 
 
@@ -1138,36 +1274,11 @@ As ol element in HTML.
 
 
 
+## ref marker
 
-
-
-## ul marker for unordered ordered list
-
-Like the ul element in HTML.
-
-
-
-### Example 1
-
-```vlpt
-ul
-li
- text of the list item
-/
-li
- text of the list item
-/
-li
- text of the list item
-/
-/ ul
-```
-
-
-
-### Printed output
-
-As ul element in HTML.
+The ref marker creates a smart cross-reference to another element (like a figure or table).
+- **Web output**: Renders as a hyperlink (e.g., "Table 1").
+- **Print output**: Renders as a text reference with page location (e.g., "Table 1 on page 14").
 
 
 
@@ -1178,69 +1289,13 @@ As ul element in HTML.
 
 
 
-## Table markers
+## Parameters for printing
 
-Table markers are similar to HTML table tags.
+These parameters can be applied to any block (like `box`, `sect`, `table`) to control layout flow without writing CSS.
 
-
-
-### table marker
-
-Like the table element in HTML.
-
-
-
-### tr marker
-
-Like the tr element in HTML.
-
-
-
-### th marker
-
-Like the th element in HTML.
-
-
-
-### td marker
-
-Like the td element in HTML.
-
-
-
-### Example 1
-
-```vlpt
-table
-// Row 1: The header row (optional)
-tr
-th
- Header 1 Text
-/ th
-th
- Header 2 Text
-/ th
-/ tr
-// Row 2: A data row
-tr
-td
- Cell A Text
-/
-td
- Cell B Text
-/
-/ tr
-// Row 3: Another data row
-tr
-td
- Cell C Text
-/
-td
- Cell D Text
-/
-/ tr
-/ table
-```
+  - **`keep`**: If set to `"true"`, the compiler ensures the block is not split across two pages (maps to `break-inside: avoid`).
+  - **`break`**: Forces a page break. Values: `"before"`, `"after"`.
+  - **`context`**: Marks the text content to be used in running headers. For example, `context="chapter"` allows a `run` marker to display the current chapter title.
 
 
 

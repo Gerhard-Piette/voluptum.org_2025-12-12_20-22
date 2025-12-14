@@ -9,6 +9,20 @@
 
 
 
+## 2025 12 14 - 14 44
+
+- Again memo because AI makes a distinction between doc and memo.
+- Removed HTML as basis. Now: All tags are chosen by Gemini 3 Pro so that Vlpt is optimal for the intended usage. 
+
+
+
+
+
+
+
+
+
+
 ## 2025 12 14
 
 Major breaking changes.
