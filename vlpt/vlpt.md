@@ -81,8 +81,6 @@
   - [Memo](#memo)
     - [memo marker](#memo-marker)
       - [Example](#example-5)
-    - [mod marker](#mod-marker)
-      - [Example](#example-6)
     - [Equal modifier as `=`](#equal-modifier-as-)
   - [Program language in Vlpt](#program-language-in-vlpt)
     - [Program language file suffix](#program-language-file-suffix)
@@ -106,12 +104,13 @@
         - [Module implementation](#module-implementation)
         - [Module value creation](#module-value-creation)
     - [Type parameter](#type-parameter)
-      - [Example](#example-7)
+      - [Example](#example-6)
     - [Type argument](#type-argument)
       - [Monomorphization](#monomorphization)
   - [Net language in Vlpt](#net-language-in-vlpt)
     - [Net language file suffix](#net-language-file-suffix)
-    - [](#)
+    - [Example content of a .net.vlpt file](#example-content-of-a-netvlpt-file)
+      - [Use of a net name in a .pro.vlpt file](#use-of-a-net-name-in-a-provlpt-file)
   - [App language in Vlpt](#app-language-in-vlpt)
     - [App language file suffix](#app-language-file-suffix)
   - [Package system](#package-system)
@@ -119,11 +118,11 @@
     - [Package management](#package-management)
   - [CSS in Vlpt](#css-in-vlpt)
     - [css marker](#css-marker)
-      - [Example](#example-8)
+      - [Example](#example-7)
       - [CSS overriding](#css-overriding)
       - [Implicit CSS classes in Vlpt](#implicit-css-classes-in-vlpt)
     - [Space marker as ` `](#space-marker-as--)
-      - [Example](#example-9)
+      - [Example](#example-8)
       - [Printed output](#printed-output-1)
     - [import marker](#import-marker)
       - [Import name](#import-name)
@@ -146,13 +145,13 @@
     - [Markers for metadata for search engines](#markers-for-metadata-for-search-engines)
     - [book marker](#book-marker)
       - [Parameters](#parameters)
-      - [Example](#example-10)
+      - [Example](#example-9)
     - [run marker](#run-marker)
       - [Parameters](#parameters-1)
-      - [Example](#example-11)
+      - [Example](#example-10)
     - [toc marker](#toc-marker)
     - [note marker](#note-marker)
-      - [Example](#example-12)
+      - [Example](#example-11)
     - [ref marker](#ref-marker)
     - [Parameters for printing](#parameters-for-printing)
     - [Template system](#template-system)
@@ -203,6 +202,11 @@ Vlpt stands for Voluptum Script.
 
 - Creation of software apps for communication. Intended app users are humans and AI.
 - Vlpt should be easily writable and readable by humans and AI. Ease of reading and writing of Vlpt text by AI is extremely important.
+- Vlpt text should serve as replacement for:
+  - HTML
+  - Markdown
+  - JSON if not used for Javascript.
+  - Office software for documents, presentations, spreadsheets, management, and more.
 
 Features related to printing on surfaces like paper sheets are welcome but have no priority because Vlpt is meant for an efficient convenient world without polluting, wasteful, limiting, inconvenient, printed documents.
 
@@ -656,8 +660,6 @@ A block in Vlpt is similar to an element in HTML or a component in a js framewor
 
 A block declaration spans from block marker to stop marker.
 
-Every block has a block type.
-
 
 
 #### Example
@@ -665,10 +667,20 @@ Every block has a block type.
 A col block spans from the col marker to the / marker.
 
 ```vlpt
-col
- text
+marker1 text2
+/
+
+marker2 text3
+ text4
+/
+
+marker5
+ text6
 /
 ```
+
+Where:
+- The text after the marker is treated like text of any other line of the block.
 
 
 
@@ -892,7 +904,7 @@ A type is like a type in programming languages.
 
 A modifier is a character or word that is declared after a marker.
 
-A modifier can be defined with the mod marker.
+A modifier is treated as key marker.
 
 
 
@@ -903,7 +915,11 @@ Multiple modifiers on the same line are allowed.
 The equal modifier must be the last modifier in a sequence of modifiers.
 
 ```vlpt
-Name - =
+Name
+modifier
+/
+modifier
+/
  content
 /
 ```
@@ -981,6 +997,8 @@ doc
 
 The memo marker is used to instruct AI about what to create. E.g. serialization code for a certain class.
 
+A memo for AI for intelligent code generation is used instead of other meta data like e.g. annotations in Java.
+
 
 
 ### memo marker
@@ -1001,38 +1019,6 @@ memo
 /
 /
 ```
-
-
-
-
-
-
-
-
-
-
-### mod marker
-
-The mod marker is used to create a modifier.
-
-
-
-#### Example
-
-```vlpt
-mod name1
-marker =
-  marker2
-  marker3
-/ marker
- content
-/ mod
-```
-
-Where:
-- The modifier name is declared after the mod marker. 
-- The marker block contains a list of markers where the modifier name1 can be applied.
-- The content explains the meaning of the modifier.
 
 
 
@@ -1400,7 +1386,8 @@ The net language allows to declare the service topology.
 The Vlpt compiler recognizes the net language only in a file with `.net.vlpt` suffix in the file name.
 
 
-### 
+### Example content of a .net.vlpt file
+
 ```vlpt
 name1: type1
 uri = "postgres://db-primary"
@@ -1430,7 +1417,7 @@ name5 import "./file.net.vlpt"
 ```
 
 Where:
-- name1 is a path segment in the network map tree.
+- name1 is a net name in the net tree.
 - The type after the path segment indicates type of the exchanged value.
 - the `uri` parameter indicates the service.
 - The `con` parameter is used to specify the kind of connection.
@@ -1438,6 +1425,20 @@ Where:
   - `out` indicates the direction and means output given to another system.
   - The direction is followed by other information required for the data transfer like e.g. a verb.
 - name5 stands for the imported network tree.
+
+
+
+#### Use of a net name in a .pro.vlpt file
+
+```vlpt
+import name1 "my.net.vlpt"
+
+name2() =
+ name1.nameName.send(value)
+ name1.nameName.send(value, "modified connection")
+ name1.nameName.get()
+ name1.nameName.get("modified connection")
+```
 
 
 
