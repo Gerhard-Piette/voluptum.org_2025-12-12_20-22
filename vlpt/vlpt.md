@@ -18,7 +18,7 @@
     - [Purpose of Vlpt](#purpose-of-vlpt)
     - [Unusual traits of Vlpt syntax](#unusual-traits-of-vlpt-syntax)
       - [Example](#example)
-    - [Vlpt comprises 3 languages](#vlpt-comprises-3-languages)
+    - [Vlpt comprises 4 Vlpt languages](#vlpt-comprises-4-vlpt-languages)
     - [Allowed characters in Vlpt text](#allowed-characters-in-vlpt-text)
       - [The Broad Categories (Allow All)](#the-broad-categories-allow-all)
       - [The Specific Exceptions (Specific Characters Only)](#the-specific-exceptions-specific-characters-only)
@@ -50,15 +50,23 @@
       - [Example 2](#example-2)
       - [Escape sequences](#escape-sequences)
       - [Printed output](#printed-output)
-    - [Stop marker as `@@`](#stop-marker-as-)
+    - [vlpt marker](#vlpt-marker)
+      - [Example 1](#example-1-1)
+    - [Space marker](#space-marker)
+      - [Example](#example-1)
+      - [Printed output](#printed-output-1)
+    - [Colon marker](#colon-marker)
+      - [Example](#example-2)
+    - [Stop marker](#stop-marker)
       - [Stop marker without marker name](#stop-marker-without-marker-name)
       - [Stop marker with marker name](#stop-marker-with-marker-name)
-    - [Comment marker as `//`](#comment-marker-as-)
-      - [Example](#example-1)
-    - [Block](#block)
-      - [Example](#example-2)
-    - [Block content](#block-content)
+    - [Comment marker\`](#comment-marker)
       - [Example](#example-3)
+    - [Block](#block)
+      - [Example](#example-4)
+    - [Block content](#block-content)
+    - [Content line](#content-line)
+      - [Example](#example-5)
     - [Inner block](#inner-block)
     - [Outer block](#outer-block)
     - [Type](#type)
@@ -70,9 +78,20 @@
       - [Creation of a doc without name](#creation-of-a-doc-without-name)
   - [Memo](#memo)
     - [memo marker](#memo-marker)
-      - [Example](#example-4)
-    - [Equal modifier as `=`](#equal-modifier-as-)
-  - [Program language in Vlpt](#program-language-in-vlpt)
+      - [Example](#example-6)
+  - [Package system](#package-system)
+    - [Package](#package)
+    - [Package management](#package-management)
+    - [import marker](#import-marker)
+      - [Import name](#import-name)
+      - [Example with a local file](#example-with-a-local-file)
+      - [Example with a local folder](#example-with-a-local-folder)
+      - [Example with a Vlpt package](#example-with-a-vlpt-package)
+      - [Use of a file name](#use-of-a-file-name)
+      - [Use of a folder name](#use-of-a-folder-name)
+      - [Use of a package name](#use-of-a-package-name)
+      - [Limitations](#limitations)
+  - [Vlpt program language](#vlpt-program-language)
     - [Program language file suffix](#program-language-file-suffix)
     - [Function](#function)
       - [Function type declaration](#function-type-declaration)
@@ -94,66 +113,46 @@
         - [Module implementation](#module-implementation)
         - [Module value creation](#module-value-creation)
     - [Type parameter](#type-parameter)
-      - [Example](#example-5)
+      - [Example](#example-7)
     - [Type argument](#type-argument)
       - [Monomorphization](#monomorphization)
-  - [Net language in Vlpt](#net-language-in-vlpt)
+  - [Vlpt net language](#vlpt-net-language)
     - [Net language file suffix](#net-language-file-suffix)
     - [Example content of a .net.vlpt file](#example-content-of-a-netvlpt-file)
       - [Use of a net name in a .pro.vlpt file](#use-of-a-net-name-in-a-provlpt-file)
-  - [App language in Vlpt](#app-language-in-vlpt)
+  - [Vlpt app language](#vlpt-app-language)
     - [App language file suffix](#app-language-file-suffix)
     - [Parameter in app language](#parameter-in-app-language)
       - [Implicit parameter in app language](#implicit-parameter-in-app-language)
       - [Explicit parameter declaration in app language](#explicit-parameter-declaration-in-app-language)
       - [Parameter usage in app language](#parameter-usage-in-app-language)
-    - [param marker in app language](#param-marker-in-app-language)
     - [Argument in app language](#argument-in-app-language)
       - [Argument declaration in app language](#argument-declaration-in-app-language)
-  - [Package system](#package-system)
-    - [Package](#package)
-    - [Package management](#package-management)
-  - [CSS in Vlpt](#css-in-vlpt)
-    - [css marker](#css-marker)
-      - [Example](#example-6)
-      - [CSS overriding](#css-overriding)
-      - [Implicit CSS classes in Vlpt](#implicit-css-classes-in-vlpt)
-    - [Space marker as ` `](#space-marker-as--)
-      - [Example](#example-7)
-      - [Printed output](#printed-output-1)
-    - [import marker](#import-marker)
-      - [Import name](#import-name)
-      - [Example with a local file](#example-with-a-local-file)
-      - [Example with a local folder](#example-with-a-local-folder)
-      - [Example with a Vlpt package](#example-with-a-vlpt-package)
-      - [Use of a file name](#use-of-a-file-name)
-      - [Use of a folder name](#use-of-a-folder-name)
-      - [Use of a package name](#use-of-a-package-name)
-      - [Limitations](#limitations)
-    - [version marker](#version-marker)
-      - [Example 1](#example-1-1)
-    - [param marker](#param-marker)
-    - [B marker](#b-marker)
-    - [Markers for layout and flow](#markers-for-layout-and-flow)
-    - [Markers for surface (containers)](#markers-for-surface-containers)
-    - [Markers for content (Text \& Media)](#markers-for-content-text--media)
-    - [Markers for lists and tables](#markers-for-lists-and-tables)
-    - [Markers for interaction (UI)](#markers-for-interaction-ui)
-    - [Markers for metadata for search engines](#markers-for-metadata-for-search-engines)
-    - [book marker](#book-marker)
-      - [Parameters](#parameters)
-      - [Example](#example-8)
-    - [run marker](#run-marker)
-      - [Parameters](#parameters-1)
-      - [Example](#example-9)
+    - [From Vlpt to HTML](#from-vlpt-to-html)
+    - [param marker in app language](#param-marker-in-app-language)
+    - [Equal marker in app language](#equal-marker-in-app-language)
+    - [Layout markers](#layout-markers)
+    - [Action markers in app language](#action-markers-in-app-language)
+    - [Description markers in app language](#description-markers-in-app-language)
+    - [Web markers in app language](#web-markers-in-app-language)
     - [toc marker](#toc-marker)
     - [note marker](#note-marker)
-      - [Example](#example-10)
+      - [Example](#example-8)
     - [ref marker](#ref-marker)
     - [Parameters for printing](#parameters-for-printing)
-    - [Template system](#template-system)
-    - [UI, script, and reactivity](#ui-script-and-reactivity)
-    - [Dot marker as `.`](#dot-marker-as-)
+  - [Vlpt style language](#vlpt-style-language)
+    - [Style language file suffix](#style-language-file-suffix)
+    - [Selector in style language](#selector-in-style-language)
+    - [Style block style language](#style-block-style-language)
+    - [Style in style language](#style-in-style-language)
+    - [Property in style language](#property-in-style-language)
+    - [Value in style language](#value-in-style-language)
+    - [Example content of a .style.vlpt file](#example-content-of-a-stylevlpt-file)
+    - [Import content of a style file](#import-content-of-a-style-file)
+    - [Style overriding](#style-overriding)
+      - [Implicit style classes in Vlpt](#implicit-style-classes-in-vlpt)
+  - [Editor for Vlpt text](#editor-for-vlpt-text)
+    - [Dot marker](#dot-marker)
       - [Dot for li](#dot-for-li)
       - [Dot for tr](#dot-for-tr)
       - [Dot for th](#dot-for-th)
@@ -197,13 +196,13 @@ Vlpt stands for Voluptum Script.
 
 ### Purpose of Vlpt
 
-- Creation of software apps for communication. Intended app users are humans and AI.
-- Vlpt should be easily writable and readable by humans and AI. Ease of reading and writing of Vlpt text by AI is extremely important.
+- Creation of software apps for communication. A static web page is also an app. Intended app users are humans and AI.
+- Ease of reading and writing of Vlpt text by humans and AI is extremely important.
 - Vlpt text should serve as replacement for:
-  - HTML
-  - Markdown
-  - JSON if not used for Javascript.
-  - Office software for documents, presentations, spreadsheets, management, and more.
+  - HTML for web pages and web apps.
+  - Markdown for documentation.
+  - JSON for data structures.
+  - Storage of data of social media posts, documents, presentations, spreadsheets, management software, and more.
 
 Features related to printing on surfaces like paper sheets are welcome but have no priority because Vlpt is meant for an efficient convenient world without polluting, wasteful, limiting, inconvenient, printed documents.
 
@@ -246,11 +245,12 @@ marker2
 
 
 
-### Vlpt comprises 3 languages
+### Vlpt comprises 4 Vlpt languages
 
-- A program language for computations.
-- A net language for interaction with services.
-- An app language for the user interface.
+- Vlpt program language for computations.
+- Vlpt net language for interaction with services.
+- Vlpt app language for the user interface.
+- Vlpt style language for styling the user interface.
 
 
 
@@ -588,7 +588,91 @@ The printed output of a string is the string content.
 
 
 
-### Stop marker as `@@`
+### vlpt marker
+
+The vlpt marker is followed by the version of Vlpt that is used in the file.
+
+The Vlpt version is important for recognition and meaning of key markers.
+
+
+
+#### Example 1
+
+```vlpt
+vlpt "1.2"
+```
+
+Where:
+- The version value is a string.
+
+
+
+
+
+
+
+
+
+
+### Space marker
+
+` ` is the space marker.
+
+The space marker as space character (U+0020 SPACE, ASCII 32 ) indicates a text line that can contain styled sections.
+
+
+
+#### Example
+
+```vlpt
+ line with [class1 class2 "formatted"] text
+```
+
+Where:
+- The space marker indicates a text line with optional styled sections.
+- class1 and class3 are style classes.
+- [class1 class2 "formatted" ] is a styled section. The string content is formatted according to class1 and class2.
+
+
+
+#### Printed output
+
+The printed output is the line including the line break character but without the ` ` marker.
+
+
+
+
+
+
+
+
+
+
+### Colon marker
+
+`:` is the colon marker.
+
+
+
+#### Example
+
+```vlpt
+marker1: text1
+marker3 : text2
+```
+
+
+
+
+
+
+
+
+
+
+### Stop marker 
+
+`@@` is the stop marker.
 
 The stop marker indicates the end or closing of a block.
 
@@ -627,7 +711,9 @@ Where:
 
 
 
-### Comment marker as `//`
+### Comment marker`
+
+`//` is the comment marker.
 
 The comment marker indicates a comment line.
 
@@ -694,7 +780,20 @@ Where:
 
 ### Block content
 
-A block content is the content between the line with the block marker and the line with the corresponding stop marker.
+The block content is the sequence of content lines of a block.
+
+
+
+
+
+
+
+
+
+
+### Content line
+
+Every content line begins with a marker.
 
 
 
@@ -703,13 +802,17 @@ A block content is the content between the line with the block marker and the li
 A col block spans from the col marker to the stop marker.
 
 ```vlpt
-col
- text
+someMarker: text1
+ text2
+ text3
 @@
 ```
 
 Where:
-- text is col content or content of a col block.
+- text1, text2, and text3 are content lines in the someMarker block.
+- text1, text2, and text3 are treated equally.
+- text1 begins with the colon marker.
+- text2 and text3 begin with the space marker.
 
 
 
@@ -892,12 +995,33 @@ memo
 
 
 
-### Equal modifier as `=`
-
-The equal modifier indicates the binding of an explicit parameter to an argument.
+## Package system
 
 
 
+### Package
+
+A package is a zip file that contains a folder that can contain files and folders.
+
+
+
+### Package management
+
+A package is identified by its identifier.
+
+The package identifier can be any string and should include the version number.
+
+The package manager can use checksums to verify the content of a package for security and reproducibility.
+
+There is no compatibility packages with a different identifier.
+
+There is no semantic versioning for Vlpt packages.
+
+(Semantic Versioning)[https://semver.org/]
+
+This removes dependency hell. This facilitates much for the writer and reader of Vlpt text because there is .
+
+[Version SAT](https://research.swtch.com/version-sat)
 
 
 
@@ -905,7 +1029,116 @@ The equal modifier indicates the binding of an explicit parameter to an argument
 
 
 
-## Program language in Vlpt
+
+
+
+### import marker
+
+The import marker allows to bind a local name to:
+- a local Vlpt file
+- a local folder with Vlpt files
+- A remote Vlpt package that is offered by a web service. 
+
+
+
+#### Import name
+
+The import name is the name that follows the import marker.
+
+
+
+#### Example with a local file
+
+```vlpt
+import Name1 "file2.vlpt"
+import Name3 "./file4.vlpt"
+import Name5 "folder6/file7.vlpt"
+import Name8 "./folder9/file10.vlpt"
+```
+
+Where:
+- "file2.vlpt" indicates file2f.vlpt in the working folder of the compiler.
+- "./file4.vlpt" indicates file4.vlpt besides the importing file.
+
+
+
+#### Example with a local folder
+
+```vlpt
+import Name1 "folder2"
+import Name3 "./folder4"
+```
+
+Where:
+- Name1 stands for the folder2 in the working folder of the compiler.
+- Name3 stands for the folder4 besides the importing file.
+
+
+
+#### Example with a Vlpt package
+
+```vlpt
+import Name1 "URI"
+```
+
+Where:
+- Name1 stands for the Vlpt package at the indicated URI.
+
+
+
+#### Use of a file name
+
+```vlpt
+import Name1 "file"
+Name1
+```
+
+Where:
+- Name1 stands for a file and the block type defined in that file. The content of a Vlpt file is a block type declaration.
+
+
+
+#### Use of a folder name
+
+```vlpt
+import Name1 "folder"
+Name1.Name2
+```
+
+Where:
+- Name1 stands for the folder.
+- Name1.Name2 means access of the file or folder in folder Name1.
+
+
+
+#### Use of a package name
+
+```vlpt
+import Name1 "URI"
+Name1.Name2
+```
+
+Where:
+- Name1 stands for a package. The package content is always a folder.
+- Name1.Name2 means access of the file or folder in package Name1.
+
+
+
+#### Limitations
+
+- Vlpt does not allow circular references among loaded files. This facilitates much for the writer and reader of Vlpt text.
+    - [Cyclic dependencies are evil](https://fsharpforfunandprofit.com/posts/cyclic-dependencies/)
+
+
+
+
+
+
+
+
+
+
+## Vlpt program language
 
 The program language is for the declaration of types, function and computations.
 
@@ -1238,7 +1471,7 @@ Where:
 
 
 
-## Net language in Vlpt
+## Vlpt net language
 
 The net language allows to declare the service topology.
 
@@ -1312,7 +1545,7 @@ name2() =
 
 
 
-## App language in Vlpt
+## Vlpt app language
 
 The app language is for the declaration of items of the user interface of the Vlpt app.
 
@@ -1344,6 +1577,8 @@ In the Vlpt app language: A parameter is a marker that can stands for an argumen
 
 The param marker is a key marker and indicates the implicit parameter in the Vlpt app language.
 
+The implicit parameter is like a slot in JS frameworks.
+
 
 
 #### Explicit parameter declaration in app language
@@ -1372,19 +1607,6 @@ Where:
 - The = marker indicates insertion the argument of the following parameter.
 - name1 is a parameter name.
 - The param marker stands for the implicit parameter.
-
-
-
-
-
-
-
-
-
-
-### param marker in app language
-
-The param marker is a key marker and indicates the implicit parameter in the Vlpt app language.
 
 
 
@@ -1426,33 +1648,13 @@ Where:
 
 
 
-## Package system
+### From Vlpt to HTML
 
+Vlpt parameters correspond to HTML attributes.
 
+Vlpt arguments correspond to HTML attribute values.
 
-### Package
-
-A package is a zip file that contains a folder that can contain files and folders.
-
-
-
-### Package management
-
-A package is identified by its identifier.
-
-The package identifier can be any string and should include the version number.
-
-The package manager can use checksums to verify the content of a package for security and reproducibility.
-
-There is no compatibility packages with a different identifier.
-
-There is no semantic versioning for Vlpt packages.
-
-(Semantic Versioning)[https://semver.org/]
-
-This removes dependency hell. This facilitates much for the writer and reader of Vlpt text because there is .
-
-[Version SAT](https://research.swtch.com/version-sat)
+Vlpt param argument corresponds to the inner text of a HTML element.
 
 
 
@@ -1463,11 +1665,9 @@ This removes dependency hell. This facilitates much for the writer and reader of
 
 
 
-## CSS in Vlpt
+### param marker in app language
 
-Vlpt offers the css marker for use of CSS.
-
-
+The param marker is a key marker and indicates the implicit parameter in the Vlpt app language.
 
 
 
@@ -1476,419 +1676,121 @@ Vlpt offers the css marker for use of CSS.
 
 
 
-### css marker
-
-The css marker allows to declare CSS rules that can be referenced within the block content in which the css block is declared.
-
-The css content is CSS text.
 
 
+### Equal marker in app language
 
-#### Example
+`=` is the equal marker.
+
+The equal marker is used to add the output of the following name to the content of the outer block.
+
+
+
+
+
+
+
+
+
+
+### Layout markers
+
+| Marker     | Purpose                             |
+| :--------- | :---------------------------------- |
+| **`col`**  | Like flex-direction: column in CSS. |
+| **`row`**  | Like flex-direction: row in CSS.    |
+| **`grid`** | Like display: grid in CSS.          |
+| **`gap`**  | Like gap in CSS.                    |
+
+
+
+
+
+
+
+
+
+
+### Action markers in app language
+
+| Marker         | Purpose                                                                         | Parameters                     |
+| :------------- | :------------------------------------------------------------------------------ | :----------------------------- |
+| **`form`**     | **Container**. Scope for data submission. Like form in HTML 5.                  | `action`, `method`             |
+| **`group`**    | **Container**. Groups radios/checks. Like fieldset in HTML 5.                   | `legend` (or `label`)          |
+| **`input`**    | **Typing**. (Text, Password, Email).                                            | `placeholder`, `type`, `value` |
+| **`textarea`** | **Long Typing**. (Often distinct in frameworks).                                | `rows`, `placeholder`          |
+| **`select`**   | **Dropdown**.                                                                   | `value`                        |
+| **`option`**   | **Item**.                                                                       | `value`, `selected`            |
+| **`check`**    | **Toggle**.                                                                     | `checked`, `label`             |
+| **`radio`**    | **Exclusive Choice**.                                                           | `checked`, `value`, `name`     |
+| **`btn`**      | **Button**.                                                                     | `onclick`, `disabled`          |
+| **`anchor`**   | **Navigation**. Maps to `<a>` element in HTML. Distinct from `link` (metadata). | `to` (or `href`)               |
+
+The type parameter can be used for different btn types and input types.
+
+The : marker can be used instead of the type parameter.
 
 ```vlpt
-box
-css
- .class1 {
-    width: 100em;
- }
-@@ css
-@@ box
-```
-
-
-
-#### CSS overriding
-
-Within a block: The local CSS overrides conflicting CSS from an outer block.
-
-
-
-#### Implicit CSS classes in Vlpt
-
-Vlpt offer the following CSS classes that can be overridden:
-- Class b for bold.
-- Class center in CSS.
-- Class i for italic.
-- Class t for line-through in CSS.
-- Class u for underline in CSS.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Space marker as ` `
-
-The space marker as space character (U+0020 SPACE, ASCII 32 ) indicates a text line that can contain styled sections.
-
-
-
-#### Example
-
-```vlpt
- line with [class1 class2 "formatted"] text
-```
-
-Where:
-- The space marker indicates a text line with optional styled sections.
-- class1 and class3 are CSS classes.
-- [class1 class2 "formatted" ] is a styled section. The string content is formatted according to class1 and class2.
-
-
-
-#### Printed output
-
-The printed output is the line including the line break character but without the ` ` marker.
-
-
-
-
-
-
-
-
-
-
-### import marker
-
-The import marker allows to bind a local name to:
-- a local Vlpt file
-- a local folder with Vlpt files
-- A remote Vlpt package that is offered by a web service. 
-
-
-
-#### Import name
-
-The import name is the name that follows the import marker.
-
-
-
-#### Example with a local file
-
-```vlpt
-import Name1 "file2.vlpt"
-import Name3 "./file4.vlpt"
-import Name5 "folder6/file7.vlpt"
-import Name8 "./folder9/file10.vlpt"
-```
-
-Where:
-- "file2.vlpt" indicates file2f.vlpt in the working folder of the compiler.
-- "./file4.vlpt" indicates file4.vlpt besides the importing file.
-
-
-
-#### Example with a local folder
-
-```vlpt
-import Name1 "folder2"
-import Name3 "./folder4"
-```
-
-Where:
-- Name1 stands for the folder2 in the working folder of the compiler.
-- Name3 stands for the folder4 besides the importing file.
-
-
-
-#### Example with a Vlpt package
-
-```vlpt
-import Name1 "URI"
-```
-
-Where:
-- Name1 stands for the Vlpt package at the indicated URI.
-
-
-
-#### Use of a file name
-
-```vlpt
-import Name1 "file"
-Name1
-```
-
-Where:
-- Name1 stands for a file and the block type defined in that file. The content of a Vlpt file is a block type declaration.
-
-
-
-#### Use of a folder name
-
-```vlpt
-import Name1 "folder"
-Name1.Name2
-```
-
-Where:
-- Name1 stands for the folder.
-- Name1.Name2 means access of the file or folder in folder Name1.
-
-
-
-#### Use of a package name
-
-```vlpt
-import Name1 "URI"
-Name1.Name2
-```
-
-Where:
-- Name1 stands for a package. The package content is always a folder.
-- Name1.Name2 means access of the file or folder in package Name1.
-
-
-
-#### Limitations
-
-- Vlpt does not allow circular references among loaded files. This facilitates much for the writer and reader of Vlpt text.
-    - [Cyclic dependencies are evil](https://fsharpforfunandprofit.com/posts/cyclic-dependencies/)
-
-
-
-
-
-
-
-
-
-
-### version marker
-
-The version marker is followed by the version number of Vlpt in which the text in the Vlpt file is written.
-
-The Vlpt version is important for the VPT reader including the compiler.
-
-
-
-#### Example 1
-
-```vlpt
-version "1.2"
-```
-
-Where:
-- The version text is a string with arbitrary content.
-
-
-
-
-
-
-
-
-
-
-### param marker
-
-The param marker is the implicit parameter and stands for the argument that is bound to the implicit parameter.
-
-
-
-
-
-
-
-
-
-
-### B marker
-
-Every B marker begins a block.
-
-
-
-
-
-
-
-
-
-
-### Markers for layout and flow
-
-| Marker      | Behavior                                                       |
-| :---------- | :------------------------------------------------------------- |
-| **`col`**   | **Vertical Stack**. Default flow. Items arrange top-to-bottom. |
-| **`row`**   | **Horizontal Flow**. Items arrange left-to-right.              |
-| **`grid`**  | **2D Grid**. Content flows into defined cells/columns.         |
-| **`layer`** | **Z-Stack**. Items overlay on top of each other.               |
-| **`gap`**   | **Spacer**. Explicit spacing (e.g., `gap "2em"`).              |
-
-
-
-
-
-
-
-
-
-
-### Markers for surface (containers)
-
-| Marker      | Role                     | SEO Value     | Visual Behavior                                                                                    |
-| :---------- | :----------------------- | :------------ | :------------------------------------------------------------------------------------------------- |
-| **`box`**   | **Visual Wrapper**       | Low (Generic) | The only element that can be target of CSS for rectangle styles. <br>*Example:* `box style="card"` |
-| **`main`**  | **Primary Content**      | **High**      | Invisible container. Marks the unique content.                                                     |
-| **`nav`**   | **Navigation**           | **High**      | Invisible container. Marks site links.                                                             |
-| **`aside`** | **Sidebar / Tangential** | Medium        | Invisible container. Marks ads/biographies.                                                        |
-| **`art`**   | **Article**              | **High**      | Invisible container. Marks syndicatable content.                                                   |
-| **`sect`**  | **Section**              | Medium        | Invisible container. Groups thematic content.                                                      |
-
-
-
-
-
-
-
-
-
-
-### Markers for content (Text & Media)
-
-| Marker     | Behavior                                                                                           |
-| :--------- | :------------------------------------------------------------------------------------------------- |
-| **` `**    | **Text line**. The space marker indicates a text line.                                             |
-| **`txt`**  | **Text block**. Merges text lines into a single flowing paragraph. Styled sections are recognized. |
-| **`code`** | **Text block**. Like txt but preserves characters exactly as written. No styled sections.          |
-| **`math`** | **Text block**. Renders accessible MathML/Latex (e.g. via MathJax)..                               |
-| **`head`** | **Heading**. The level is automatically determined by the compiler based on block nesting.         |
-| **`img`**  | **Image**. Handles visual assets.                                                                  |
-| **`icon`** | **Icon**. Semantic symbols (SVG/Font).                                                             |
-
-
-
-
-
-
-
-
-
-
-### Markers for lists and tables
-
-*Abstract data structures allow the compiler to choose the best view (table vs. grid).*
-
-| Marker     | Behavior                                                |
-| :--------- | :------------------------------------------------------ |
-| **`list`** | **Sequence**. A simple list of items (bullet/numbered). |
-| **`item`** | **Entry**. An item within a list.                       |
-| **`data`** | **Structured Set**. Replaces `table`.                   |
-| **`row`**  | **Data Row**. A group of fields in the set.             |
-| **`fld`**  | **Data Field**. A single cell of data.                  |
-
-
-
-
-
-
-
-
-
-
-### Markers for interaction (UI)
-
-*Functional elements only.*
-
-| Marker    | Behavior                                                                                                                         |
-| :-------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| **`act`** | **Action**. For interaction. Interaction might be multi-modal. E.g. buttons and Links. <br>*Param:* `do="save"` or `to="/home"`. |
-| **`inp`** | **Input**. Text fields, checkboxes, etc.                                                                                         |
-
-
-
-
-
-
-
-
-
-
-### Markers for metadata for search engines
-
-| Marker      | Behavior                                                                                                    |
-| :---------- | :---------------------------------------------------------------------------------------------------------- |
-| **`title`** | **Page Title**. The most critical SEO signal. Sets the browser tab title and search result headline.        |
-| **`meta`**  | **Metadata**. Defines description, viewport, and robots directives. <br>*Params:* `name`, `content`.        |
-| **`link`**  | **Resource Link**. Defines canonical URLs to prevent duplicate content issues. <br>*Params:* `rel`, `href`. |
-
-
-
-
-
-
-
-
-
-
-### book marker
-
-Vlpt abstracts the complexity of paged media (PDF, Paper). The compiler is responsible for translating these high-level markers into the necessary CSS (e.g., Paged Media Module) and scripts (e.g., Paged.js).
-
-The book marker defines the physical properties of the document and acts as the container for print-specific configuration.
-
-
-
-#### Parameters
-- **`size`**: Sets the paper size (e.g., "A4", "Letter").
-- **`margins`**: Sets the global page margins.
-
-
-
-#### Example
-
-```vlpt
-book size="A4" margins="2.5cm"
-  // Running elements are defined here
+btn
+type = "save"
 @@
-```
-
-
-
-
-
-
-
-
-
-
-### run marker
-
-The run marker defines "running content" (headers and footers) that repeats on every page.
-
-
-
-#### Parameters
-
-**`area`**: The position on the page.
-    - `top-left`, `top-center`, `top-right`
-    - `bottom-left`, `bottom-center`, `bottom-right`
-
-
-
-#### Example
-
-```vlpt
-book
- run area="top-center"
-  txt "Project Documentation"
- @@
- run area="bottom-right"
-  txt "Page {page} of {pages}"
- @@
+@@ btn
+btn: "save"
 @@
+btn: "outline"
+@@
+input: "email"
+@@
+btn
+style
+ @ios { "bordered" }
+@@
+@@ btn
 ```
+
+Where:
+- The style argument block contains a sequence of styles as defined in the Vlpt style language. There is no selector because the style applies only the the outer block.
+
+
+
+
+
+
+
+
+
+
+### Description markers in app language
+
+| Marker        | Purpose                                                                          |
+| :------------ | :------------------------------------------------------------------------------- |
+| **`h`**       | Header. The Vlpt compiler determines the header level automatically.             |
+| **`text`**    | Text block with optional styled sections and strings for whitespace declaration. |
+| **`article`** | Like in HTML5.                                                                   |
+| **`section`** | Like in HTML5.                                                                   |
+| **`aside`**   | Like in HTML5.                                                                   |
+| **`main`**    | Like in HTML5.                                                                   |
+| **`nav`**     | Like in HTML5.                                                                   |
+
+
+
+
+
+
+
+
+
+
+### Web markers in app language
+
+These markers are used for web pages and search engine optimization (SEO).
+
+| Marker       | Rationale for AI Optimization                   |
+| :----------- | :---------------------------------------------- |
+| **`title`**  | Translated to `<title>` element.                |
+| **`meta`**   | Translated to `<meta>` element.                 |
+| **`link`**   | Translated to `<link rel="canonical">` element. |
+| **`script`** | Translated to `<script>` element.               |
 
 
 
@@ -1901,10 +1803,17 @@ book
 
 ### toc marker
 
-The toc marker automatically generates a Table of Contents based on the `head` (heading) blocks in the document.
+The toc marker automatically generates a Table of Contents for the content in the outer block of the toc marker.
 
-  - **Web output**: A navigation list with clickable links.
-  - **Print output**: A list with leader dots and calculated page numbers.
+
+```
+toc
+ arguments for TOC creation.
+@@
+```
+
+Where:
+- The parameters and arguments for a toc block are not determined yet.
 
 
 
@@ -1957,29 +1866,9 @@ The ref marker creates a smart cross-reference to another element (like a figure
 ### Parameters for printing
 
 These parameters can be applied to any block (like `box`, `sect`, `table`) to control layout flow without writing CSS.
-
-  - **`keep`**: If set to `"true"`, the compiler ensures the block is not split across two pages (maps to `break-inside: avoid`).
-  - **`break`**: Forces a page break. Values: `"before"`, `"after"`.
-  - **`context`**: Marks the text content to be used in running headers. For example, `context="chapter"` allows a `run` marker to display the current chapter title.
-
-
-
-
-
-
-
-
-
-
-### Template system
-
-The Vlpt compiler can use only Vlpt text.
-
-Vlpt can import only Vlpt text.
-
-Vlpt does not offer computation, branching, and iteration like other template systems.
-
-The Vlpt compiler offers an API that allows to create Vlpt blocks and to pass arguments to block parameters.
+- **`keep`**: If set to `"true"`, the compiler ensures the block is not split across two pages (maps to `break-inside: avoid`).
+- **`break`**: Forces a page break. Values: `"before"`, `"after"`.
+- **`context`**: Marks the text content to be used in running headers. For example, `context="chapter"` allows a `run` marker to display the current chapter title.
 
 
 
@@ -1990,16 +1879,125 @@ The Vlpt compiler offers an API that allows to create Vlpt blocks and to pass ar
 
 
 
-### UI, script, and reactivity 
+## Vlpt style language
 
-UI = user interface.
-
-Vlpt offers:
-- The script marker that is like the script element in HTML.
-- Parameters that are like attributes in HTML.
+The style language allows to style UI blocks in a way that is similar to CSS.
 
 
 
+### Style language file suffix
+
+The Vlpt compiler recognizes the style language only in a file with `.style.vlpt` suffix in the file name.
+
+The reasons for having a style file and not a style marker:
+- The syntaxes of the style language and the app language are different. The style language is intentionally kept similar to CSS.
+- A separate file allows to separate the selection of UI blocks for styling from the nesting of UI blocks for layout.
+
+
+
+### Selector in style language
+
+A selector is like a selector in CSS.
+
+
+
+### Style block style language
+
+A style block is delimited by the curly brackets `{` and `}`.
+
+A style block is like declaration block in CSS.
+
+
+
+### Style in style language
+
+A style is the combination of property and value.
+
+A style is like a declaration in CSS.
+
+
+
+### Property in style language
+
+A property is like a property in CSS.
+
+
+
+### Value in style language
+
+A value is like a value in CSS.
+
+
+
+### Example content of a .style.vlpt file
+
+Vlpt offers a style language that is similar to CSS.
+
+Vlpt offer platform specific properties for styling.
+
+Comments begin with //.
+
+```vlpt
+.primary-btn {
+  // 1. Shared (Compiler attempts to map these to all platforms)
+  // Web: color: white;
+  // Android: ButtonColors(contentColor = White)
+  // iOS: .foregroundColor(.white)
+  color: white; 
+  font-size: 16px;
+
+  // 2. Web Specific override
+  @web {
+    cursor: pointer; // Valid style, but meaningless on touch
+    user-select: none;
+    transition: all 0.2s;
+  }
+
+  // 3. Apple Specific (SwiftUI Modifiers)
+  // The compiler expects valid SwiftUI modifier strings here
+  @ios {
+    shadow: radius=5, y=2; // Specialized Vlpt property
+    apple-visual-effect: blur;
+  }
+
+  // 4. Android Specific (Compose Modifiers)
+  @android {
+    elevation: 4dp;
+  }
+}
+```
+
+
+### Import content of a style file
+
+```vlpt
+@import "URI"
+```
+
+Where:
+- The URI must identify a .style.vlpt file. The content of the file.style.vlpt is copied into the importing file.
+- The @import is different from @import in CSS because @import in the style language is done statically and not at runtime.  
+
+@import is required to use styles from other files. There is no implicit inheritance or overriding of styles from different files.
+
+
+
+### Style overriding
+
+Within the same style file: A later declared style overrides a previously declared style.
+
+
+
+#### Implicit style classes in Vlpt
+
+Vlpt offers the following implicit style classes in the app language:
+- Class b for bold.
+- Class center.
+- Class i for italic.
+- Class t for line-through.
+- Class u for underline.
+
+The implicit style classes can be overridden.
 
 
 
@@ -2007,7 +2005,16 @@ Vlpt offers:
 
 
 
-### Dot marker as `.`
+
+
+
+## Editor for Vlpt text
+
+
+
+### Dot marker
+
+`.` is the dot marker.
 
 The dot marker should be immediately replaced by the tool by another marker.
 

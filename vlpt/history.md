@@ -17,6 +17,22 @@ Changed parameter. Moved parameter to app language section.
 
 Changed argument. Moved parameter to app language section.
 
+Improved app language.
+
+Added markers for app language.
+
+Added content line.
+
+Added colon marker
+
+Added equal marker
+
+Removed backtick expressions from headers.
+
+Added platform specific css properties.
+
+Removed css. Added style language.
+
 
 
 
