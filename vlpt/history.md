@@ -9,7 +9,21 @@
 
 
 
-## 2025 12 14
+## 2025 12 16
+
+Replaced stop marker with @@ because @@ os only 1 token and multiple AI agree that @@ is optimal.
+
+
+
+
+
+
+
+
+
+
+
+## 2025 12 15
 
 Major breaking changes.
 
@@ -27,6 +41,8 @@ Added:
 - Functions
 - Type parameter
 - ...
+
+Every block must end with the stop marker.
 
 The line after the marker is not special.
 

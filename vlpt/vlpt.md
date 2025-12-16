@@ -50,15 +50,15 @@
       - [Example 2](#example-2)
       - [Escape sequences](#escape-sequences)
       - [Printed output](#printed-output)
-    - [Stop marker as `/`](#stop-marker-as-)
-      - [Example](#example-1)
-    - [Convention for stop markers](#convention-for-stop-markers)
+    - [Stop marker as `@@`](#stop-marker-as-)
+      - [Stop marker without marker name](#stop-marker-without-marker-name)
+      - [Stop marker with marker name](#stop-marker-with-marker-name)
     - [Comment marker as `//`](#comment-marker-as-)
-      - [Example](#example-2)
+      - [Example](#example-1)
     - [Block](#block)
-      - [Example](#example-3)
+      - [Example](#example-2)
     - [Block content](#block-content)
-      - [Example](#example-4)
+      - [Example](#example-3)
     - [Inner block](#inner-block)
     - [Outer block](#outer-block)
     - [Parameter](#parameter)
@@ -80,7 +80,7 @@
       - [Creation of a doc without name](#creation-of-a-doc-without-name)
   - [Memo](#memo)
     - [memo marker](#memo-marker)
-      - [Example](#example-5)
+      - [Example](#example-4)
     - [Equal modifier as `=`](#equal-modifier-as-)
   - [Program language in Vlpt](#program-language-in-vlpt)
     - [Program language file suffix](#program-language-file-suffix)
@@ -104,7 +104,7 @@
         - [Module implementation](#module-implementation)
         - [Module value creation](#module-value-creation)
     - [Type parameter](#type-parameter)
-      - [Example](#example-6)
+      - [Example](#example-5)
     - [Type argument](#type-argument)
       - [Monomorphization](#monomorphization)
   - [Net language in Vlpt](#net-language-in-vlpt)
@@ -118,11 +118,11 @@
     - [Package management](#package-management)
   - [CSS in Vlpt](#css-in-vlpt)
     - [css marker](#css-marker)
-      - [Example](#example-7)
+      - [Example](#example-6)
       - [CSS overriding](#css-overriding)
       - [Implicit CSS classes in Vlpt](#implicit-css-classes-in-vlpt)
     - [Space marker as ` `](#space-marker-as--)
-      - [Example](#example-8)
+      - [Example](#example-7)
       - [Printed output](#printed-output-1)
     - [import marker](#import-marker)
       - [Import name](#import-name)
@@ -145,13 +145,13 @@
     - [Markers for metadata for search engines](#markers-for-metadata-for-search-engines)
     - [book marker](#book-marker)
       - [Parameters](#parameters)
-      - [Example](#example-9)
+      - [Example](#example-8)
     - [run marker](#run-marker)
       - [Parameters](#parameters-1)
-      - [Example](#example-10)
+      - [Example](#example-9)
     - [toc marker](#toc-marker)
     - [note marker](#note-marker)
-      - [Example](#example-11)
+      - [Example](#example-10)
     - [ref marker](#ref-marker)
     - [Parameters for printing](#parameters-for-printing)
     - [Template system](#template-system)
@@ -235,9 +235,9 @@ marker1
  content of marker1 block
 marker2
  content of marker2 block
-/ marker2
+@@
  content of marker1 block
-/ maker1
+@@
 ```
 
 
@@ -591,7 +591,7 @@ The printed output of a string is the string content.
 
 
 
-### Stop marker as `/`
+### Stop marker as `@@`
 
 The stop marker indicates the end or closing of a block.
 
@@ -599,23 +599,27 @@ The editor should add the stop marker automatically when a marker is declared.
 
 
 
-#### Example
+#### Stop marker without marker name
 
 ```vlpt
-/
-/xxx
-/ xxx
-/      xxx
+@@
 ```
 
 Where:
-- xxx is optional. xxx stands for a marker or the name of a component. Space characters between / and xxs are allowed. Tools can add the marker or name when absent.
+- @@ should be used when the closed marker block does not contain another marker block.
 
 
 
-### Convention for stop markers
+#### Stop marker with marker name
 
-`/` and not `/ xxx` should declared if the block started on the previous line.
+```vlpt
+@@ name
+```
+
+Where:
+- name is a marker name.
+- The marker name can help humans and AI with reading and writing Vlpt text.
+- Vlpt tool settings should allow a rule for when to show or add a marker name after @@.
 
 
 
@@ -664,19 +668,19 @@ A block declaration spans from block marker to stop marker.
 
 #### Example
 
-A col block spans from the col marker to the / marker.
+A col block spans from the col marker to the stop marker.
 
 ```vlpt
 marker1 text2
-/
+@@
 
 marker2 text3
  text4
-/
+@@
 
 marker5
  text6
-/
+@@
 ```
 
 Where:
@@ -699,12 +703,12 @@ A block content is the content between the line with the block marker and the li
 
 #### Example
 
-A col block spans from the col marker to the / marker.
+A col block spans from the col marker to the stop marker.
 
 ```vlpt
 col
  text
-/
+@@
 ```
 
 Where:
@@ -763,10 +767,10 @@ An explicit parameter has a user defined name.
 
 ```vlpt
 Name1 = "default text"
-/
+@@
 Name2 =
  default text
-/ Name2
+@@ Name2
 ```
 
 Where:
@@ -781,8 +785,8 @@ An explicit parameters can be added to an inner block in the outer block.
 ```vlpt
 Name1
 Name9 = "default text"
-/
-/ Name1
+@@
+@@ Name1
 ```
 
 Where:
@@ -797,8 +801,8 @@ A explicit parameter can be removed from an inner block in the outer block.
 ```vlpt
 Name1
 Name9 #
-/
-/ Name1
+@@
+@@ Name1
 ```
 
 Where:
@@ -859,12 +863,12 @@ Name1 = "argument1"
 
 Name2 =
  argument2
-/ Name2
+@@ Name2
 
 box
  style = "class1"
  argument3
-/ box
+@@ box
 ```
 
 Where:
@@ -917,11 +921,11 @@ The equal modifier must be the last modifier in a sequence of modifiers.
 ```vlpt
 Name
 modifier
-/
+@@
 modifier
-/
+@@
  content
-/
+@@
 ```
 
 
@@ -954,16 +958,16 @@ The use of a doc name means to give the doc information about the outer block wh
 
 ```vlpt
 doc name1 = "some documentation"
-/
+@@
 
 doc name2 =
  content
-/ doc
+@@ doc
 
 name3
  name1
  name2
-/ name3
+@@ name3
 ```
 
 Where:
@@ -977,11 +981,11 @@ A nameless doc gives information about the outer block.
 
 ```vlpt
 doc "some documentation"
-/
+@@
 
 doc
  content
-/ doc
+@@ doc
 ```
 
 
@@ -1012,12 +1016,12 @@ A memo block without name
 ```vlpt
 col
 doc "Primary user profile card displayed on the dashboard."
-/
+@@
 memo
  TODO: Refactor the image loading logic.
  AI Instruction: Ensure this block is responsive on mobile screens.
-/
-/
+@@
+@@
 ```
 
 
@@ -1096,7 +1100,7 @@ Where:
 ```vlpt
 name1 (name2: type3, name4: type5) type6
  content
-/
+@@
 ```
 
 Where:
@@ -1156,16 +1160,16 @@ The class modifier indicates a class type definition.
 ```vlpt
 Name1 class
 name2: type3 = value4
-/
+@@
 name5: type declaration
  over multiple
  lines
-/
+@@
 name7 (name8: type9) type10 =
  body over
  multiple lines
-/
-/ Name1
+@@
+@@ Name1
 ```
 
 Where:
@@ -1182,11 +1186,11 @@ Where:
 ```vlpt
 Name1
 name2 = expr3
-/
+@@
 name5 =
  expr6
-/
-/ Name1
+@@
+@@ Name1
 ```
 
 Where:
@@ -1230,10 +1234,10 @@ The module modifier indicates a module type definition.
 ```vlpt
 Name1 module
 name1(name2: type3) type4
-/
+@@
 name5() type6
-/
-/ Name1
+@@
+@@ Name1
 ```
 
 Where:
@@ -1271,10 +1275,10 @@ A module implementation must follow the impl type definition in the same file. T
 ImplType1 impl ModuleType2
 name1(name2: type3) type4 =
  content
-/
+@@
 name5() type6 = exp7
-/
-/ ImplType1
+@@
+@@ ImplType1
 ```
 
 
@@ -1315,11 +1319,11 @@ AdvancedGraph[N, E] class
 where
   N: Node + Serializable
   E: Edge + Comparable[E]
-/ where
+@@ where
 addNode(node: N) =
     ...
-/
-/ AdvancedGraph
+@@
+@@ AdvancedGraph
 ```
 
 Where:
@@ -1352,12 +1356,12 @@ There is monomorphization of the functions of an impl type.
 ```vlpt
 name1(name2: List[T]) =
 name3 = ""
-/
+@@
 name2.add(name3)
-/
+@@
 name4 = ArrayList[u16]
-/
-/ name1
+@@
+@@ name1
 name1(name4)
 ```
 
@@ -1391,29 +1395,29 @@ The Vlpt compiler recognizes the net language only in a file with `.net.vlpt` su
 ```vlpt
 name1: type1
 uri = "postgres://db-primary"
-/
+@@
 con = "in select"
-/
+@@
 name2: type2
 uri = "mqtt://broker.example.com"
-/
+@@
 con = "in subscribe"
-/
-/ name2
+@@
+@@ name2
 name3: type3
 uri = "postgres://db-logs"
-/
+@@
 con = "out insert"
-/
+@@
 name4: type4
 uri = "https://api.myapp.com/users"
-/
+@@
 con = "out pull"
-/
+@@
 name5 import "./file.net.vlpt"
-/
-/ name3
-/ name1
+@@
+@@ name3
+@@ name1
 ```
 
 Where:
@@ -1537,8 +1541,8 @@ css
  .class1 {
     width: 100em;
  }
-/ css
-/ box
+@@ css
+@@ box
 ```
 
 
@@ -1896,7 +1900,7 @@ The book marker defines the physical properties of the document and acts as the 
 ```vlpt
 book size="A4" margins="2.5cm"
   // Running elements are defined here
-/
+@@
 ```
 
 
@@ -1928,11 +1932,11 @@ The run marker defines "running content" (headers and footers) that repeats on e
 book
  run area="top-center"
   txt "Project Documentation"
- /
+ @@
  run area="bottom-right"
   txt "Page {page} of {pages}"
- /
-/
+ @@
+@@
 ```
 
 
@@ -2089,7 +2093,7 @@ Replaced by:
 ```vlpt
 table
 tr
-/ tr
+@@ tr
 ```
 
 
@@ -2108,7 +2112,7 @@ Replaced by:
 table
 tr
 th
-/ th
+@@ th
 ```
 
 
@@ -2120,7 +2124,7 @@ table
 tr
 th
  content
-/
+@@
 .
 ```
 
@@ -2131,9 +2135,9 @@ table
 tr
 th
  content
-/
+@@
 th
-/ th
+@@ th
 ```
 
 
@@ -2145,7 +2149,7 @@ table
 tr
 td
  content
-/ td
+@@ td
 .
 ```
 
@@ -2156,9 +2160,9 @@ table
 tr
 td
  content
-/ td
+@@ td
 td
-/ td
+@@ td
 ```
 
 
