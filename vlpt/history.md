@@ -11,8 +11,11 @@
 
 ## 2025 12 16
 
-Replaced stop marker with @@ because @@ os only 1 token and multiple AI agree that @@ is optimal.
+Replaced / with @@ as stop marker.
 
+Changed parameter. Moved parameter to app language section.
+
+Changed argument. Moved parameter to app language section.
 
 
 

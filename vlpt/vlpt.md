@@ -61,16 +61,6 @@
       - [Example](#example-3)
     - [Inner block](#inner-block)
     - [Outer block](#outer-block)
-    - [Parameter](#parameter)
-      - [Implicit parameter declaration](#implicit-parameter-declaration)
-      - [Explicit parameter declaration](#explicit-parameter-declaration)
-      - [Added Parameter](#added-parameter)
-    - [Removed Parameter](#removed-parameter)
-    - [Parameter usage](#parameter-usage)
-    - [Argument](#argument)
-      - [Argument line](#argument-line)
-      - [Parameter block](#parameter-block)
-      - [Argument declaration](#argument-declaration)
     - [Type](#type)
     - [Modifier](#modifier)
       - [Modifier usage](#modifier-usage)
@@ -113,6 +103,13 @@
       - [Use of a net name in a .pro.vlpt file](#use-of-a-net-name-in-a-provlpt-file)
   - [App language in Vlpt](#app-language-in-vlpt)
     - [App language file suffix](#app-language-file-suffix)
+    - [Parameter in app language](#parameter-in-app-language)
+      - [Implicit parameter in app language](#implicit-parameter-in-app-language)
+      - [Explicit parameter declaration in app language](#explicit-parameter-declaration-in-app-language)
+      - [Parameter usage in app language](#parameter-usage-in-app-language)
+    - [param marker in app language](#param-marker-in-app-language)
+    - [Argument in app language](#argument-in-app-language)
+      - [Argument declaration in app language](#argument-declaration-in-app-language)
   - [Package system](#package-system)
     - [Package](#package)
     - [Package management](#package-management)
@@ -749,144 +746,6 @@ An outer block contains 1 or more inner blocks.
 
 
 
-### Parameter
-
-In Vlpt: A parameter means a parameter of a block type.
-
-
-
-#### Implicit parameter declaration
-
-The param marker indicates the implicit parameter.
-
-
-
-#### Explicit parameter declaration
-
-An explicit parameter has a user defined name.
-
-```vlpt
-Name1 = "default text"
-@@
-Name2 =
- default text
-@@ Name2
-```
-
-Where:
-- The default text can be declared in a string.
-
-
-
-#### Added Parameter
-
-An explicit parameters can be added to an inner block in the outer block.
-
-```vlpt
-Name1
-Name9 = "default text"
-@@
-@@ Name1
-```
-
-Where:
-- Name9 is an added parameter if Name9 is not defined in the Name1 type.
-
-
-
-### Removed Parameter
-
-A explicit parameter can be removed from an inner block in the outer block.
-
-```vlpt
-Name1
-Name9 #
-@@
-@@ Name1
-```
-
-Where:
-- The # character after Name9 means to remove Name9 from the block with Name1 type.
-
-
-
-
-
-
-
-
-
-
-### Parameter usage
-
-```vlpt
-Name1
-param
-```
-
-Where:
-- The parameter Name1 is used as a marker.
-- The param marker stands for the implicit parameter.
-- A parameter is replaced with the argument of the parameter. 
-
-
-
-
-
-
-
-
-
-
-### Argument
-
-In Vlpt: An argument is a string or block content that is bound to a block parameter.
-
-
-
-#### Argument line
-
-An argument line contains the binding of parameter and string as argument.
-
-
-
-#### Parameter block
-
-An argument block contains the binding of parameter and a block content as argument.
-
-
-
-#### Argument declaration
-
-```vlpt
-Name1 = "argument1"
-
-Name2 =
- argument2
-@@ Name2
-
-box
- style = "class1"
- argument3
-@@ box
-```
-
-Where:
-- In block content: The = character after a marker indicates the binding of an explicit parameter to an argument.
-- Name1 is a parameter that is bound to the string "argument1" as argument.
-- Name2 is a parameter that is bound to the Name2 content as argument.
-- The "class1" string is bound to the explicit style parameter of the box block. An explicit parameter is like an attribute in HTML.
-- The argument3 box content is bound to the implicit parameter of the box type because that content does not follow any = character.
-
-
-
-
-
-
-
-
-
-
 ### Type
 
 A type is used to create something that is according to the type.
@@ -1465,6 +1324,98 @@ The Vlpt compiler recognizes the app language only in a file with `.app.vlpt` su
 
 - `.app.vlpt` suffix for a file that contains a complete app.
 - `.applet.vlpt` suffix for a file that is not meant to be used as complete app.
+
+
+
+
+
+
+
+
+
+
+### Parameter in app language
+
+In the Vlpt app language: A parameter is a marker that can stands for an argument.
+
+
+
+#### Implicit parameter in app language
+
+The param marker is a key marker and indicates the implicit parameter in the Vlpt app language.
+
+
+
+#### Explicit parameter declaration in app language
+
+An explicit parameter is a user defined name.
+
+```vlpt
+name1 =
+ default content
+@@
+```
+
+Where:
+- name1 is a parameter as indicated by = after name1. The parameter type is always VlptApp for valid text in the Vlpt app language.
+
+
+
+#### Parameter usage in app language
+
+```vlpt
+= name1
+= param
+```
+
+Where:
+- The = marker indicates insertion the argument of the following parameter.
+- name1 is a parameter name.
+- The param marker stands for the implicit parameter.
+
+
+
+
+
+
+
+
+
+
+### param marker in app language
+
+The param marker is a key marker and indicates the implicit parameter in the Vlpt app language.
+
+
+
+
+
+
+
+
+
+
+### Argument in app language
+
+In the Vlpt app language:
+- An argument is a value of type VlptApp for valid text in the Vlpt app language.
+- An argument is bound to a parameter.
+
+
+
+#### Argument declaration in app language
+
+```vlpt
+Name1 = "argument1"
+@@
+
+Name2 =
+ argument2
+@@
+```
+
+Where:
+- The = character after a parameter marker indicates the binding of the parameter to the argument.
 
 
 
